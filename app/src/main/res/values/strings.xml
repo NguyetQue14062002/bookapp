@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">bookApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="reading_fragment">Reading</string>
+    <string name="unread_fragment">Unread</string>
+    <string name="done_fragment">Done</string>
+</resources>
