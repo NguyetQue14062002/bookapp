@@ -57,7 +57,7 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -79,7 +79,7 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvAuthor"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -101,7 +101,7 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvPublisher"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -123,7 +123,7 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvDescripton"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -145,7 +145,7 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvTotalPage"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -167,7 +167,7 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvCategory"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -189,7 +189,7 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvLink"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -210,7 +210,7 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvStatus"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -232,7 +232,7 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvUrlImage"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"

@@ -37,14 +37,14 @@
                 android:layout_height="324dp"
                 android:background="@drawable/profile_background" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tvReview"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_margin="20dp"
                 android:background="#E6E5E5"
                 android:padding="10dp"
-                android:text="Write your review...." />
+                android:hint="Viết bình luận của bạn..." />
 
             <android.widget.Button
                 android:id="@+id/btnSubmit"
@@ -52,7 +52,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:background="@color/black"
-                android:text="Submit Review"
+                android:text="Gửi đánh giá"
                 android:textColor="@color/white" />
 
             <LinearLayout
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_weight="1"
-                    android:text="Reviews"
+                    android:text="Đánh giá"
                     android:textColor="@color/black" />
 
                 <TextView

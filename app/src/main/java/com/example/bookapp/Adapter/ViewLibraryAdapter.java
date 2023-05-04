@@ -1,4 +1,4 @@
-package com.example.bookapp;
+package com.example.bookapp.Adapter;
 
 
 
@@ -7,6 +7,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import com.example.bookapp.Fragment.DoneFragment;
+import com.example.bookapp.Fragment.ReadingFragment;
+import com.example.bookapp.Fragment.UnreadFragment;
 
 public class ViewLibraryAdapter extends FragmentStatePagerAdapter {
     public ViewLibraryAdapter(@NonNull FragmentManager fm, int behavior) {

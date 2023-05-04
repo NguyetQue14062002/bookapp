@@ -63,12 +63,13 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/baseline_search_24_brown" />
 
-        <TextView
+        <EditText
             android:id="@+id/tvSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
             android:layout_weight="4"
+            android:background="@null"
             android:hint="Tìm tác giả, thể loại,.." />
 
         <ImageView
@@ -174,73 +175,5 @@
         </LinearLayout>
     </ScrollView>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPage">
-
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:backgroundTint="@color/material_dynamic_primary95"
-            app:fabCradleMargin="8dp"
-            app:fabCradleRoundedCornerRadius="50dp"
-            app:fabCradleVerticalOffset="6dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imgBook"
-                        android:layout_width="match_parent"
-                        android:layout_height="21dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/baseline_home_24" />
-
-                    <ImageView
-                        android:id="@+id/imgLibrary"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/baseline_library_books_24" />
-
-                    <ImageView
-                        android:id="@+id/imgCommunity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/baseline_diversity_2_24" />
-
-                    <ImageView
-                        android:id="@+id/imgSetting"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/baseline_settings_24" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-        </com.google.android.material.bottomappbar.BottomAppBar>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
