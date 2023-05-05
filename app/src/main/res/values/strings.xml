@@ -4,4 +4,6 @@
     <string name="reading_fragment">Reading</string>
     <string name="unread_fragment">Unread</string>
     <string name="done_fragment">Done</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

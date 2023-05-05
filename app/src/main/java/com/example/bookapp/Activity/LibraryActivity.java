@@ -19,8 +19,6 @@ public class LibraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_library);
 
 
-        tabLayout = findViewById(R.id.tab_layout);
-        viewPager= findViewById(R.id.view_pager);
 
         ViewLibraryAdapter viewLibraryAdapter = new ViewLibraryAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setAdapter(viewLibraryAdapter);
