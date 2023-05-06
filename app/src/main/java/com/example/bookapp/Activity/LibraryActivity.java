@@ -20,9 +20,6 @@ public class LibraryActivity extends AppCompatActivity {
 
 
 
-        ViewLibraryAdapter viewLibraryAdapter = new ViewLibraryAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        viewPager.setAdapter(viewLibraryAdapter);
-        tabLayout.setupWithViewPager(viewPager);
 
     }
 
