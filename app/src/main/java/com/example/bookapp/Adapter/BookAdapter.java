@@ -1,6 +1,7 @@
 package com.example.bookapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookapp.Activity.BookDetailActivity;
 import com.example.bookapp.Domain.Book;
 import com.example.bookapp.R;
 
@@ -39,6 +41,18 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.bookTitle.setText(book.getTitle());
         holder.bookAuthor.setText(book.getAuthor());
         Glide.with(context).load(book.getImage_url()).into(holder.bookImage);
+
+        //TODO: Add Event Listener for Book
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, BookDetailActivity.class);
+                // TODO: Put a Book object to BookDetailActivity
+                intent.putExtra("myBook", books.get(position));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

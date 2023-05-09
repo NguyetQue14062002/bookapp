@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".Activity.BookDetailActivity">
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/profile_background"
@@ -19,16 +21,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imageView15"
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/baseline_menu_24" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/backBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    app:srcCompat="@drawable/baseline_arrow_back_24" />
+
+                <ImageView
+                    android:id="@+id/addToListBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:srcCompat="@drawable/baseline_add_24" />
+            </RelativeLayout>
 
             <ImageView
                 android:id="@+id/imgBook"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="230dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 app:srcCompat="@drawable/image_23" />
 
@@ -37,18 +57,8 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <RatingBar
-                    android:id="@+id/ratingBar3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="47dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:numStars="5"
-                    android:rating="4"
-                    android:stepSize="1" />
-
                 <TextView
-                    android:id="@+id/tvAuthor"
+                    android:id="@+id/tvBookName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -58,7 +68,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvBookName"
+                    android:id="@+id/tvAuthor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -76,7 +86,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="2010 \n Published in"
+                        android:text="Bloomsbury \n Publisher"
                         android:textAlignment="center" />
 
                     <TextView
@@ -92,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="187 \n Reviews"
+                        android:text="187 \n Downloads"
                         android:textAlignment="center" />
                 </LinearLayout>
             </LinearLayout>
@@ -106,30 +116,35 @@
                 android:textColor="@color/black"
                 tools:textAlignment="center" />
 
-            <android.widget.Button
-                android:id="@+id/btnRead"
-                android:layout_width="133dp"
-                android:layout_height="53dp"
-                android:layout_gravity="center|center_horizontal"
-                android:background="@color/black"
-                android:text="Đọc sách"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-
-            <android.widget.Button
-                android:id="@+id/btnReview"
-                android:layout_width="133dp"
-                android:layout_height="53dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:background="@color/black"
-                android:text="Đánh Giá"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="50dp">
+
+        <android.widget.Button
+            android:id="@+id/btnRead"
+            android:layout_width="133dp"
+            android:layout_height="53dp"
+            android:layout_marginStart="40dp"
+            android:background="@color/black"
+            android:text="Đọc sách"
+            android:textColor="@color/white" />
+
+        <android.widget.Button
+            android:id="@+id/btnReview"
+            android:layout_width="133dp"
+            android:layout_height="53dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="40dp"
+            android:background="@color/black"
+            android:text="Tải sách"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

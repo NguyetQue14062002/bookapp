@@ -104,11 +104,11 @@ public class HomeFragment extends Fragment {
     private void dataInitial() {
         books = new ArrayList<>();
 
-        books.add(new Book("J. K. Rowling", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "Harry Potter"));
-        books.add(new Book("J. K. Rowling", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "Harry Potter"));
-        books.add(new Book("J. K. Rowling", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "Harry Potter"));
-        books.add(new Book("J. K. Rowling", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "Harry Potter"));
-        books.add(new Book("J. K. Rowling", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "Harry Potter"));
+        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
+        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
+        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
+        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
+        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
 
         categories = new ArrayList<>();
 

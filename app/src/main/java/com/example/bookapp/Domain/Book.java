@@ -1,6 +1,8 @@
 package com.example.bookapp.Domain;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
     private int id, category_id, status_id, publisher_id;
     private String author, description, image_url, link, title;
 
