@@ -53,7 +53,10 @@ public class ProfileActivity extends AppCompatActivity {
             tvfull_name.setText(user.getFull_name());
             tvemail.setText(user.getEmail());
             tvsdt.setText(user.getPhone_number());
-            Glide.with(this).load(user.getAvatar()).into(avatarPro);
+            if (user.getAvatar() == null)
+                avatarPro.setImageResource(R.drawable.avata);
+            else
+                Glide.with(this).load(user.getAvatar()).into(avatarPro);
             exit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

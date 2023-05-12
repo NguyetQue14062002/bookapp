@@ -103,6 +103,9 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                                 //getting the user from the response
                                 JSONObject userJson = obj.getJSONObject("user_data");
+                                String avatar = userJson.getString("avatar");
+                                if (avatar == "null")
+                                    avatar = null;
 
                                 //creating a new user object
                                 User user = new User(
@@ -110,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                                         userJson.getInt("role_id"),
                                         userJson.getString("email"),
                                         userJson.getString("full_name"),
-                                        userJson.getString("avatar"),
+                                        avatar,
                                         userJson.getString("token"),
                                         userJson.getString("phone_number"),
                                         obj.getString("access_token")
