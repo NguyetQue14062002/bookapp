@@ -36,9 +36,10 @@ import java.util.Map;
 
 public class CreatePostActivity extends AppCompatActivity {
     private TextView userName, uploadImage;
-    private ImageView avatar, imagePost;
+    private ImageView avatar, imagePost, ivBack;
     private Button btnPost;
     private  EditText tcontent;
+    private String access_token;
     private  final  int GALLERY_REQ_CODE = 1000;
 
 
@@ -47,9 +48,6 @@ public class CreatePostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createpost);
 
-        Intent intent = getIntent();
-        String access_token = intent.getStringExtra("access_token");
-
         if(SharedPrefManager.getInstance(this).isLoggedIn()) {
             userName = findViewById(R.id.tvPostAuthor);
             avatar= findViewById(R.id.userPostImage);
@@ -57,7 +55,9 @@ public class CreatePostActivity extends AppCompatActivity {
             uploadImage = findViewById(R.id.tvUpload);
             tcontent= findViewById(R.id.tvContent);
             btnPost= findViewById(R.id.btnPost);
+            ivBack = findViewById(R.id.ivBack);
             User user = SharedPrefManager.getInstance(this).getUser();
+            access_token = user.getAccess_token();
             userName.setText(user.getFull_name());
             Glide.with(this).load(user.getAvatar()).into(avatar);
             uploadImage.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +75,12 @@ public class CreatePostActivity extends AppCompatActivity {
                 }
             });
 
+            ivBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(CreatePostActivity.this, MainActivity.class));
+                }
+            });
         }
 
     }
@@ -114,9 +120,6 @@ public class CreatePostActivity extends AppCompatActivity {
                                 startActivity(new Intent(CreatePostActivity.this, LoginActivity.class));
                             } else {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(CreatePostActivity.this, PostActivity.class);
-                                intent.putExtra("access_token", access_token);
-                                startActivity(intent);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

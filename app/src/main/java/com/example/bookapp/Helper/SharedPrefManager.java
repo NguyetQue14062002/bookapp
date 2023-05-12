@@ -45,7 +45,7 @@ public class SharedPrefManager {
     }
 
     //This method will store the user data in shared preferences
-    public void userLogin(User user, String accessToken) {
+    public void userLogin(User user) {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_ID, user.getId());
@@ -55,7 +55,7 @@ public class SharedPrefManager {
         editor.putString(KEY_AVATAR, user.getAvatar());
         editor.putString(KEY_PHONE_NUMBER, user.getPhone_number());
         editor.putString(KEY_TOKEN, user.getToken());
-        editor.putString(KEY_ACCESS_TOKEN, accessToken);
+        editor.putString(KEY_ACCESS_TOKEN, user.getAccess_token());
         editor.apply();
     }
 
@@ -76,8 +76,8 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_AVATAR, null),
                 sharedPreferences.getString(KEY_PHONE_NUMBER, null),
                 sharedPreferences.getString(KEY_PASSWORD, null),
-                sharedPreferences.getString(KEY_TOKEN, null)
-
+                sharedPreferences.getString(KEY_TOKEN, null),
+                sharedPreferences.getString(KEY_ACCESS_TOKEN, null)
         );
     }
 

@@ -3,17 +3,24 @@ package com.example.bookapp.Domain;
 import java.sql.Date;
 
 public class Post {
-    private int id, user_id, status_id;
-    private String content;
-    private Date createAt, updateAt;
+    private int id, status_id;
+    private String tcontent, image, user;
+    private Date createAt;
+    private Integer numLikes, numShares, numComments;
 
-    public Post(int id, int user_id, int status_id, String content, Date createAt, Date updateAt) {
+    public Post(int id, String user, int status_id, String tcontent, String image, Date createAt, Integer numLikes, Integer numShares, Integer numComments) {
         this.id = id;
-        this.user_id = user_id;
+        this.user = user;
         this.status_id = status_id;
-        this.content = content;
+        this.tcontent = tcontent;
+        this.image = image;
         this.createAt = createAt;
-        this.updateAt = updateAt;
+        this.numLikes = numLikes;
+        this.numShares = numShares;
+        this.numComments = numComments;
+    }
+
+    public Post() {
     }
 
     public int getId() {
@@ -24,12 +31,36 @@ public class Post {
         this.id = id;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public String getUser() {
+        return user;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public Integer getNumLikes() {
+        return numLikes;
+    }
+
+    public void setNumLikes(Integer numLikes) {
+        this.numLikes = numLikes;
+    }
+
+    public Integer getNumShares() {
+        return numShares;
+    }
+
+    public void setNumShares(Integer numShares) {
+        this.numShares = numShares;
+    }
+
+    public Integer getNumComments() {
+        return numComments;
+    }
+
+    public void setNumComments(Integer numComments) {
+        this.numComments = numComments;
     }
 
     public int getStatus_id() {
@@ -40,12 +71,20 @@ public class Post {
         this.status_id = status_id;
     }
 
-    public String getContent() {
-        return content;
+    public String getTcontent() {
+        return tcontent;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setTcontent(String tcontent) {
+        this.tcontent = tcontent;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Date getCreateAt() {
@@ -54,13 +93,5 @@ public class Post {
 
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
     }
 }

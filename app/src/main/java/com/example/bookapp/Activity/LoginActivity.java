@@ -104,16 +104,15 @@ public class LoginActivity extends AppCompatActivity {
                                         userJson.getString("email"),
                                         userJson.getString("avatar"),
                                         userJson.getString("phone_number"),
-                                        userJson.getString("token")
+                                        userJson.getString("token"),
+                                        obj.getString("access_token")
                                 );
-
-                                String access_token = obj.getString("access_token");
                                 //storing the user in shared preferences
 
-                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user, access_token);
+                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                                 Toast.makeText(getApplicationContext(), user.getToken(), Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LoginActivity.this, CreatePostActivity.class);
-                                intent.putExtra("access_token", access_token);
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("access_token", user.getAccess_token());
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
