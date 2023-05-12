@@ -27,6 +27,8 @@ public class SharedPrefManager {
     private static final String KEY_PHONE_NUMBER = "key_phone_number";
     private static final String KEY_PASSWORD = "key_password";
 
+    private static final String KEY_ACCESS_TOKEN = "key_access_token";
+
     private  static SharedPrefManager mInstance;
     private static Context ctx;
 
@@ -43,7 +45,7 @@ public class SharedPrefManager {
     }
 
     //This method will store the user data in shared preferences
-    public void userLogin(User user) {
+    public void userLogin(User user, String accessToken) {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_ID, user.getId());
@@ -53,13 +55,14 @@ public class SharedPrefManager {
         editor.putString(KEY_AVATAR, user.getAvatar());
         editor.putString(KEY_PHONE_NUMBER, user.getPhone_number());
         editor.putString(KEY_TOKEN, user.getToken());
+        editor.putString(KEY_ACCESS_TOKEN, accessToken);
         editor.apply();
     }
 
     //This method will checker whether user is already logged in or not
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(KEY_FULL_NAME, null) != null;
+        return sharedPreferences.getString(KEY_ACCESS_TOKEN, null) != null;
     }
 
     //This method will give the logged in user
@@ -74,6 +77,7 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_PHONE_NUMBER, null),
                 sharedPreferences.getString(KEY_PASSWORD, null),
                 sharedPreferences.getString(KEY_TOKEN, null)
+
         );
     }
 

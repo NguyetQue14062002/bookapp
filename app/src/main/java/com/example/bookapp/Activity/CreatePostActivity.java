@@ -38,20 +38,24 @@ public class CreatePostActivity extends AppCompatActivity {
     private TextView userName, uploadImage;
     private ImageView avatar, imagePost;
     private Button btnPost;
-    private  EditText content;
+    private  EditText tcontent;
     private  final  int GALLERY_REQ_CODE = 1000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createpost);
 
+        Intent intent = getIntent();
+        String access_token = intent.getStringExtra("access_token");
+
         if(SharedPrefManager.getInstance(this).isLoggedIn()) {
             userName = findViewById(R.id.tvPostAuthor);
             avatar= findViewById(R.id.userPostImage);
             imagePost= findViewById(R.id.imgPost);
             uploadImage = findViewById(R.id.tvUpload);
-            content= findViewById(R.id.tvContent);
+            tcontent= findViewById(R.id.tvContent);
             btnPost= findViewById(R.id.btnPost);
             User user = SharedPrefManager.getInstance(this).getUser();
             userName.setText(user.getFull_name());
@@ -67,7 +71,7 @@ public class CreatePostActivity extends AppCompatActivity {
             btnPost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    CreatePost();
+                    CreatePost(access_token);
                 }
             });
 
@@ -87,12 +91,12 @@ public class CreatePostActivity extends AppCompatActivity {
             }
         }
     }
-    void  CreatePost(){
+    void  CreatePost(String access_token){
         String url = "http://10.0.2.2:5000/api/post/";
-        String contentPost = content.getText().toString();
+        String contentPost = tcontent.getText().toString();
         if (TextUtils.isEmpty(contentPost)) {
             Toast.makeText(this, "Hôm nay bạn nghĩ gì?", Toast.LENGTH_SHORT).show();
-            content.requestFocus();
+            tcontent.requestFocus();
             return;
         }
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -110,6 +114,9 @@ public class CreatePostActivity extends AppCompatActivity {
                                 startActivity(new Intent(CreatePostActivity.this, LoginActivity.class));
                             } else {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(CreatePostActivity.this, PostActivity.class);
+                                intent.putExtra("access_token", access_token);
+                                startActivity(intent);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -135,7 +142,7 @@ public class CreatePostActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> params = new HashMap<>();
-                params.put("tcontent", "contentPost");
+                params.put("tcontent", contentPost);
                 return params;
             }
         };
