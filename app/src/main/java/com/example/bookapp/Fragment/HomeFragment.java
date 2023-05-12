@@ -1,32 +1,45 @@
 package com.example.bookapp.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.example.bookapp.Adapter.BookAdapter;
 import com.example.bookapp.Adapter.CategoryAdapter;
 import com.example.bookapp.Domain.Book;
 import com.example.bookapp.Domain.Category;
+import com.example.bookapp.Domain.User;
+import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.R;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import okhttp3.OkHttpClient;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment  {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,13 +49,14 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TextView tvHi;
 
     private ArrayList<Book> books;
     private ArrayList<Category> categories;
     private RecyclerView booksRecyclerView;
 
     private RecyclerView categoryRecyclerView;
-
+    private EditText etSearch;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -99,16 +113,22 @@ public class HomeFragment extends Fragment {
         categoryRecyclerView = view.findViewById(R.id.rcCategory);
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         categoryRecyclerView.setAdapter(new CategoryAdapter(getContext(), categories));
-    }
+        tvHi = view.findViewById(R.id.tvHello);
+        etSearch = view.findViewById(R.id.tvSearch);
+
+
+            tvHi.setText("Chào "+ SharedPrefManager.getInstance(getActivity()).getUser().getFull_name());
+
+        }
+
 
     private void dataInitial() {
         books = new ArrayList<>();
-
-        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
-        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
-        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
-        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
-        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
+//        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
+//        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
+//        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
+//        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
+//        books.add(new Book(1, 1, 1, 1, "J. K. Rowling", "Description", "https://i.pinimg.com/564x/8a/86/6d/8a866d42d846e3a3f8bd7285feca53fc.jpg", "https://thuviensach.vn/pdf/viewer.php?id=dbc25e" ,"Harry Potter"));
 
         categories = new ArrayList<>();
 
@@ -119,4 +139,6 @@ public class HomeFragment extends Fragment {
         categories.add(new Category("Cổ tích"));
 
     }
+
+
 }

@@ -137,7 +137,7 @@
             android:textColor="@color/white" />
 
         <android.widget.Button
-            android:id="@+id/btnReview"
+            android:id="@+id/btnDownLoad"
             android:layout_width="133dp"
             android:layout_height="53dp"
             android:layout_alignParentRight="true"

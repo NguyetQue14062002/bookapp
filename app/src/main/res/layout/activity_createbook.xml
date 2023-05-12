@@ -101,16 +101,12 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <EditText
-                android:id="@+id/tvPublisher"
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/spinnerPublisher"
+                android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/textbox_background"
-                android:gravity="center|start"
-                android:hint="Nhà xuất bản"
-                android:textColor="@color/black" />
+                android:layout_marginEnd="20dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -167,16 +163,12 @@
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <EditText
-                android:id="@+id/tvCategory"
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/spinnerCategory"
+                android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/textbox_background"
-                android:gravity="center|start"
-                android:hint="Loại sách"
-                android:textColor="@color/black" />
+                android:layout_marginEnd="20dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -207,19 +199,16 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
+                android:text="Trạng thái"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
 
-            <EditText
-                android:id="@+id/tvStatus"
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/spinnerStatus"
+                android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/textbox_background"
-                android:gravity="center|start"
-                android:hint="Trạng thái sách"
-                android:textColor="@color/black" />
+                android:layout_marginEnd="20dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -244,7 +233,7 @@
                 android:textColor="@color/black" />
 
             <android.widget.Button
-                android:id="@+id/button"
+                android:id="@+id/btnCreate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

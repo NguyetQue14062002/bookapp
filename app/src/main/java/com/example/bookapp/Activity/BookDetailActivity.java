@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -21,17 +22,13 @@ public class BookDetailActivity extends AppCompatActivity {
     private TextView bookName, author, description;
 
     private Book book;
-
+    private Button btnRead, btnDown;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
 
         initData();
-
-
-
-
 
     }
 
@@ -44,7 +41,8 @@ public class BookDetailActivity extends AppCompatActivity {
         bookName = findViewById(R.id.tvBookName);
         author = findViewById(R.id.tvAuthor);
         description = findViewById(R.id.tvIntro);
-
+        btnRead = findViewById(R.id.btnRead);
+        btnDown = findViewById(R.id.btnDownLoad);
         // Add eventListener for buttons
         addToListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +73,12 @@ public class BookDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(BookDetailActivity.this, MainActivity.class));
+            }
+        });
+        btnRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(BookDetailActivity.this, ReadBookActivity.class));
             }
         });
 

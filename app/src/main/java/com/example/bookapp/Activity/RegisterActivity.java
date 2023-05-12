@@ -101,20 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
                             //if no error in response
                             if (obj.getInt("err") == 0) {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                                //getting the user from the response
-//                                JSONObject userJson = obj.getJSONObject("user");
 
-                                // TODO: Get user data from response
-                                //creating a new user object
-//                                User user = new User(
-//                                        userJson.getInt("id"),
-//                                        userJson.getString("username"),
-//                                        userJson.getString("email"),
-//                                        userJson.getString("gender"),
-//                                        userJson.getString("images")
-//                                );
-//                                //storing the user in shared preferences
-//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
                                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                             } else {

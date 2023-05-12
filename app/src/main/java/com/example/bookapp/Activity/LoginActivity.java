@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.Constants;
 import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.Helper.VolleySingle;
@@ -41,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, CreatePostActivity.class));
         }
 
         etmail = findViewById(R.id.tvEmailLogin);
@@ -82,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //If everything is fine
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:5000/api/auth/login",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:5000/api/account/login",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -93,21 +94,24 @@ public class LoginActivity extends AppCompatActivity {
                             if (obj.getInt("err") == 0) {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                                 //getting the user from the response
-//                                JSONObject userJson = obj.getJSONObject("user");
+                                JSONObject userJson = obj.getJSONObject("user_data");
 
-                                // TODO: Get user data from response
                                 //creating a new user object
-//                                User user = new User(
-//                                        userJson.getInt("id"),
-//                                        userJson.getString("username"),
-//                                        userJson.getString("email"),
-//                                        userJson.getString("gender"),
-//                                        userJson.getString("images")
-//                                );
-//                                //storing the user in shared preferences
-//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                                User user = new User(
+                                        userJson.getInt("id"),
+                                        userJson.getInt("role_id"),
+                                        userJson.getString("full_name"),
+                                        userJson.getString("email"),
+                                        userJson.getString("avatar"),
+                                        userJson.getString("phone_number"),
+                                        obj.getString("access_token")
+                                );
+                                //storing the user in shared preferences
 
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                                Toast.makeText(getApplicationContext(), user.getToken(), Toast.LENGTH_SHORT).show();
+
+                                startActivity(new Intent(LoginActivity.this, CreatePostActivity.class));
                             } else {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
                             }
@@ -119,7 +123,10 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        if (error.getMessage() != null) {
+                            Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 }
         ) {
@@ -134,4 +141,5 @@ public class LoginActivity extends AppCompatActivity {
         VolleySingle.getInstance(this).addToRequestQueue(stringRequest);
 
     }
+
 }

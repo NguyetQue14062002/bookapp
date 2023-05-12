@@ -228,7 +228,7 @@
                 android:textColor="@color/black" />
 
             <android.widget.Button
-                android:id="@+id/button"
+                android:id="@+id/btnCreate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

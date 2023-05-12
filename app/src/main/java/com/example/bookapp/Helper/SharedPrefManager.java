@@ -52,7 +52,6 @@ public class SharedPrefManager {
         editor.putString(KEY_EMAIL, user.getEmail());
         editor.putString(KEY_AVATAR, user.getAvatar());
         editor.putString(KEY_PHONE_NUMBER, user.getPhone_number());
-        editor.putString(KEY_PASSWORD, user.getPassword());
         editor.putString(KEY_TOKEN, user.getToken());
         editor.apply();
     }

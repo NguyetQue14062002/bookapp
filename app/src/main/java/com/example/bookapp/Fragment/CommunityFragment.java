@@ -89,5 +89,4 @@ public class CommunityFragment extends Fragment {
         // TODO: Initial Data and Create Layout Manager for postsRecyclerView
     }
 
-
 }
