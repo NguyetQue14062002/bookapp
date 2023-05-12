@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
-            startActivity(new Intent(this, CreatePostActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
         }
 
         etmail = findViewById(R.id.tvEmailLogin);

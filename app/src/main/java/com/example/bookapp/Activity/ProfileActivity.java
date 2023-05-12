@@ -57,7 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
             exit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(ProfileActivity.this, HomeFragment.class));
+                    startActivity(new Intent(ProfileActivity.this, MainActivity.class));
                 }
             });
             btnResetpass.setOnClickListener(new View.OnClickListener() {

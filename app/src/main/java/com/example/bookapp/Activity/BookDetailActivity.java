@@ -3,18 +3,33 @@ package com.example.bookapp.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Domain.Book;
+import com.example.bookapp.Domain.User;
+import com.example.bookapp.Helper.SharedPrefManager;
+import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BookDetailActivity extends AppCompatActivity {
     private ImageView addToListBtn, backBtn, imgBook;
@@ -22,13 +37,22 @@ public class BookDetailActivity extends AppCompatActivity {
     private TextView bookName, author, description;
 
     private Book book;
-    private Button btnRead, btnDown;
+
+    private User currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
 
+        currentUser = SharedPrefManager.getInstance(this).getUser();
+
+
         initData();
+
+
+
+
 
     }
 
@@ -41,8 +65,8 @@ public class BookDetailActivity extends AppCompatActivity {
         bookName = findViewById(R.id.tvBookName);
         author = findViewById(R.id.tvAuthor);
         description = findViewById(R.id.tvIntro);
-        btnRead = findViewById(R.id.btnRead);
-        btnDown = findViewById(R.id.btnDownLoad);
+
+
         // Add eventListener for buttons
         addToListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,11 +85,30 @@ public class BookDetailActivity extends AppCompatActivity {
                                 "You Clicked : " + item.getTitle(),
                                 Toast.LENGTH_SHORT
                         ).show();
+
+                        switch (item.getItemId()) {
+                            case R.id.reading:
+                                book.setStatus_id(4);
+                                break;
+
+                            case R.id.done:
+                                book.setStatus_id(5);
+                                break;
+
+                            case R.id.unread:
+                                book.setStatus_id(3);
+                                break;
+
+                        }
+
+                        createHistory();
+
                         return true;
                     }
                 });
 
                 popup.show(); //showing popup menu
+
             }
         });
 
@@ -75,17 +118,61 @@ public class BookDetailActivity extends AppCompatActivity {
                 startActivity(new Intent(BookDetailActivity.this, MainActivity.class));
             }
         });
-        btnRead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(BookDetailActivity.this, ReadBookActivity.class));
-            }
-        });
 
         // Init Data for Book
         Glide.with(this).load(book.getImage_url()).into(imgBook);
         bookName.setText(book.getTitle());
         author.setText(book.getAuthor());
         description.setText(book.getDescription());
+    }
+
+    private void createHistory() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("book_id", book.getId());
+            jsonObject.put("status_id", book.getStatus_id());
+        } catch(Exception e) {
+
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest (Request.Method.POST, "http://10.0.2.2:5000/api/history", jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            //converting response to json object
+                            //if no error in response
+                            if (response.getInt("err") == 0) {
+                                Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
+                                //getting the user from the response
+
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.getMessage() != null) {
+                            Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", currentUser.getToken());
+                return params;
+            }
+
+        };
+        VolleySingle.getInstance(this).addToRequestQueue(request);
     }
 }

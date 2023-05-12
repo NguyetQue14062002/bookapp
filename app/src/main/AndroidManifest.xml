@@ -39,6 +39,7 @@
             android:name=".Activity.BookDetailActivity"
             android:exported="false" />
         <activity android:name=".Activity.MainActivity" />
+        <activity android:name=".Activity.PostActivity" />
         <activity
             android:name=".Activity.LoginActivity"
             android:exported="true">

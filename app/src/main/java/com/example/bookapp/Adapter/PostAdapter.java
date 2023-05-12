@@ -26,18 +26,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder>{
-    Context context;
     List<Post> posts = new ArrayList<>();
+    private OnItemClickListener onItemClickListener;
 
-    public PostAdapter(Context context, List<Post> posts) {
-        this.context = context;
-        this.posts = posts;
+    public PostAdapter() {
     }
 
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.row_item_post_community,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item_post_community,parent,false);
         return new PostViewHolder(view);
     }
 
@@ -47,14 +45,47 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         // TODO: Binding data for a post
         holder.name.setText(post.getUser());
         holder.tcontent.setText(post.getTcontent());
-        holder.numLikes.setText(post.getNumLikes());
-        holder.numShares.setText(post.getNumShares());
-        holder.numComments.setText(post.getNumComments());
+        Integer numLikes = post.getNumLikes();
+        if (numLikes != null) {
+            holder.numLikes.setText(numLikes.toString());
+        } else {
+            holder.numLikes.setText("0");
+        }
+        Integer numShares = post.getNumShares();
+        if (numShares != null) {
+            holder.numShares.setText(numShares.toString());
+        } else {
+            holder.numShares.setText("0");
+        }
+        Integer numComments = post.getNumComments();
+        if (numComments != null) {
+            holder.numComments.setText(numComments.toString());
+        } else {
+            holder.numComments.setText("0");
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(post);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+        notifyDataSetChanged();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder {
@@ -71,6 +102,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             numShares = itemView.findViewById(R.id.tvNumShare);
             numComments = itemView.findViewById(R.id.tvNumCmt);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Post post);
     }
 
 }

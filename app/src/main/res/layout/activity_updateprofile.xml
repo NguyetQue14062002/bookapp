@@ -50,7 +50,7 @@
                 app:srcCompat="@drawable/defautavt" />
 
             <EditText
-                android:id="@+id/etFullnameProfile"
+                android:id="@+id/etFullnameProUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -74,7 +74,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvEmailProfile"
+                    android:id="@+id/tvEmailProUpdate"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -98,7 +98,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/etPhoneProfile"
+                    android:id="@+id/etPhoneProUpdate"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
