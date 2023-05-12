@@ -38,9 +38,9 @@
         <activity
             android:name=".Activity.BookDetailActivity"
             android:exported="false" />
-        <activity android:name=".Activity.LoginActivity" />
+        <activity android:name=".Activity.MainActivity" />
         <activity
-            android:name=".Activity.MainActivity"
+            android:name=".Activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
