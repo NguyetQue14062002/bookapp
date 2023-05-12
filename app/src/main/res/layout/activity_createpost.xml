@@ -40,7 +40,7 @@
             android:clickable="false"
             android:text="Đăng"
             android:textColor="@color/white"
-            android:visibility="visible" />
+            android:visibility="visible"/>
     </LinearLayout>
 
     <LinearLayout

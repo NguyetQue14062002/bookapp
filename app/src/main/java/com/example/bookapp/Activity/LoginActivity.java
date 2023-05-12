@@ -108,19 +108,17 @@ public class LoginActivity extends AppCompatActivity {
                                 User user = new User(
                                         userJson.getInt("id"),
                                         userJson.getInt("role_id"),
-                                        userJson.getString("full_name"),
                                         userJson.getString("email"),
+                                        userJson.getString("full_name"),
                                         userJson.getString("avatar"),
-                                        userJson.getString("phone_number"),
                                         userJson.getString("token"),
+                                        userJson.getString("phone_number"),
                                         obj.getString("access_token")
                                 );
                                 //storing the user in shared preferences
 
                                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-                                Toast.makeText(getApplicationContext(), user.getToken(), Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("access_token", user.getAccess_token());
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
@@ -136,7 +134,6 @@ public class LoginActivity extends AppCompatActivity {
                         if (error.getMessage() != null) {
                             Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 }
         ) {

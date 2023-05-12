@@ -13,7 +13,7 @@ public class User implements Serializable {
 
     private String access_token;
 
-    public User(int id, int role_id, String email, String full_name, String avatar, String token, String phone_number, String password, String access_token) {
+    public User(int id, int role_id, String email, String full_name, String avatar, String token, String phone_number, String access_token) {
         this.id = id;
         this.role_id = role_id;
         this.email = email;
@@ -21,19 +21,7 @@ public class User implements Serializable {
         this.avatar = avatar;
         this.token = token;
         this.phone_number = phone_number;
-        this.password = password;
         this.access_token = access_token;
-    }
-
-    public User(int id, int role_id, String email, String full_name, String avatar, String token, String phone_number, String password) {
-        this.id = id;
-        this.role_id = role_id;
-        this.email = email;
-        this.full_name = full_name;
-        this.avatar = avatar;
-        this.token = token;
-        this.phone_number = phone_number;
-        this.password = password;
     }
 
     public User(int id, int role_id, String email, String full_name, String avatar, String token, String phone_number) {

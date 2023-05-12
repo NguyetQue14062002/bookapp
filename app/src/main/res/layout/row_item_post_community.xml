@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,7 +48,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageView19"
+                android:id="@+id/ivMoreOption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -71,8 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="sfhfbksvkajvalsjncams,c jefnjefn,samc ,alwifqlwifnlaksf. vkalefqlekfamflksnfjsdkfnwiewlfqqkelgmwlkfjpqwopqfhewfnsd.vlsmvskvmslvkmslkvmslvsdkvslvknslkvnsvlsndvs"
-                android:textAlignment="center" />
+                android:text="vd" />
 
             <ImageView
                 android:id="@+id/postImage"
@@ -161,7 +156,5 @@
                 android:layout_weight="2"
                 android:text="Chia sẻ" />
         </LinearLayout>
-
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

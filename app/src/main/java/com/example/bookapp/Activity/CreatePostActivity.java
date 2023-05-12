@@ -31,6 +31,7 @@ import com.example.bookapp.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,13 +73,14 @@ public class CreatePostActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     CreatePost(access_token);
+                    finish();
                 }
             });
 
             ivBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(CreatePostActivity.this, MainActivity.class));
+                    finish();
                 }
             });
         }
@@ -86,7 +88,6 @@ public class CreatePostActivity extends AppCompatActivity {
     }
     @Override
     protected  void onActivityResult(int requestCode, int resultCode,@NonNull Intent data) {
-
 
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK)

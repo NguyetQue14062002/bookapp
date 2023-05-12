@@ -1,11 +1,13 @@
 package com.example.bookapp.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -19,9 +21,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.bookapp.Activity.CreatePostActivity;
-import com.example.bookapp.Domain.Book;
-import com.example.bookapp.Domain.Category;
+import com.example.bookapp.Activity.MainActivity;
+import com.example.bookapp.Adapter.PostAdapter;
 import com.example.bookapp.Domain.Post;
+import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
 
 import org.json.JSONArray;
@@ -48,10 +51,10 @@ public class CommunityFragment extends Fragment {
 
 
     private List<Post> posts = new ArrayList<>();
-    private RecyclerView postsRecyclerView;
+    private PostAdapter postAdapter;
 
     private ImageView ivNewPost;
-
+    private RecyclerView rvPosts;
 
     public CommunityFragment() {
         // Required empty public constructor
@@ -77,15 +80,6 @@ public class CommunityFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -100,21 +94,29 @@ public class CommunityFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getPosts();
+        ivNewPost = view.findViewById(R.id.ivNewPost);
+        rvPosts = view.findViewById(R.id.rvPosts);
+        posts = getPosts();
+        rvPosts.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rvPosts.setLayoutManager(layoutManager);
+        postAdapter = new PostAdapter(getContext(), posts);
+        rvPosts.setAdapter(postAdapter);
 
-        ivNewPost = getView().findViewById(R.id.ivNewPost);
         ivNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CreatePostActivity.class);
+                startActivity(intent);
             }
         });
 
         // TODO: Initial Data and Create Layout Manager for postsRecyclerView
     }
 
-    public void getPosts () {
-        StringRequest stringRequestPost = new StringRequest(Request.Method.GET, "http://localhost:5000/api/post/",
+    public List<Post> getPosts () {
+        List<Post> listPosts = new ArrayList<>();
+        StringRequest stringRequestPost = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/post/",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -128,11 +130,12 @@ public class CommunityFragment extends Fragment {
                                     JSONObject postJson = postsJson.getJSONObject(i);
                                     Post post = new Post();
                                     post.setId(postJson.getInt("id"));
-                                    post.setUser(postJson.getJSONObject("user").getString("fullname"));
+                                    JSONObject userJson = postJson.getJSONObject("user");
+                                    post.setUser(userJson.getString("full_name"));
                                     post.setTcontent(postJson.getString("tcontent"));
                                     post.setImage(postJson.getString("image"));
                                     post.setStatus_id(postJson.getInt("status_id"));
-                                    StringRequest stringRequestLike = new StringRequest(Request.Method.GET, "http://localhost:5000/api/like/?id=" + post.getId(),
+                                    StringRequest stringRequestLike = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/like/?id=" + post.getId(),
                                             new Response.Listener<String>() {
                                                 @Override
                                                 public void onResponse(String response) {
@@ -152,13 +155,14 @@ public class CommunityFragment extends Fragment {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             if (error.getMessage() != null) {
-                                                //Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
                                     });
+                                    VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequestLike);
 
-                                    StringRequest stringRequestComment = new StringRequest(Request.Method.GET, "http://localhost:5000/api/comment/?id=" + post.getId(),
+                                    StringRequest stringRequestComment = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/comment/?id=" + post.getId(),
                                             new Response.Listener<String>() {
                                                 @Override
                                                 public void onResponse(String response) {
@@ -178,13 +182,14 @@ public class CommunityFragment extends Fragment {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             if (error.getMessage() != null) {
-                                                //Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
                                     });
+                                    VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequestComment);
 
-                                    StringRequest stringRequestShare = new StringRequest(Request.Method.GET, "http://localhost:5000/api/share/?id=" + post.getId(),
+                                    StringRequest stringRequestShare = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/share/?id=" + post.getId(),
                                             new Response.Listener<String>() {
                                                 @Override
                                                 public void onResponse(String response) {
@@ -204,13 +209,14 @@ public class CommunityFragment extends Fragment {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             if (error.getMessage() != null) {
-                                                //Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
                                     });
+                                    VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequestShare);
 
-                                    posts.add(post);
+                                    listPosts.add(post);
 
                                 }
 
@@ -224,11 +230,13 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error.getMessage() != null) {
-                    //Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
         });
+        VolleySingle.getInstance(getActivity()).addToRequestQueue(stringRequestPost);
+        return listPosts;
     }
 
 

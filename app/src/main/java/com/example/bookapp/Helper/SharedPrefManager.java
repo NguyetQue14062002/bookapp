@@ -71,12 +71,11 @@ public class SharedPrefManager {
         return new User(
                 sharedPreferences.getInt(KEY_ID, -1),
                 sharedPreferences.getInt(KEY_ROLE_ID, -1),
-                sharedPreferences.getString(KEY_FULL_NAME, null),
                 sharedPreferences.getString(KEY_EMAIL, null),
+                sharedPreferences.getString(KEY_FULL_NAME, null),
                 sharedPreferences.getString(KEY_AVATAR, null),
-                sharedPreferences.getString(KEY_PHONE_NUMBER, null),
-                sharedPreferences.getString(KEY_PASSWORD, null),
                 sharedPreferences.getString(KEY_TOKEN, null),
+                sharedPreferences.getString(KEY_PHONE_NUMBER, null),
                 sharedPreferences.getString(KEY_ACCESS_TOKEN, null)
         );
     }
