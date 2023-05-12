@@ -1,13 +1,21 @@
 package com.example.bookapp.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.bookapp.Activity.ProfileActivity;
+import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.R;
 
 /**
@@ -25,7 +33,8 @@ public class SettingsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private TextView tvname, tvEmail;
+    private ImageView avatar;
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -61,6 +70,32 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        View rootView=  inflater.inflate(R.layout.fragment_settings, container, false);
+        TextView tvseem = (TextView) rootView.findViewById(R.id.tvNameSetting);
+        tvseem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToAttract();
+            }
+        });
+        return rootView;
     }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        tvname = view.findViewById(R.id.tvNameSetting);
+        avatar = view.findViewById(R.id.imageUserSetting);
+        tvEmail= view.findViewById(R.id.tvEmailSetting);
+        tvname.setText(SharedPrefManager.getInstance(getActivity()).getUser().getFull_name());
+        tvEmail.setText(SharedPrefManager.getInstance(getActivity()).getUser().getEmail());
+        Glide.with(this).load(SharedPrefManager.getInstance(getActivity()).getUser().getAvatar()).into(avatar);
+    }
+    public void goToAttract()
+    {
+
+        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+        startActivity(intent);
+
+    }
+
 }

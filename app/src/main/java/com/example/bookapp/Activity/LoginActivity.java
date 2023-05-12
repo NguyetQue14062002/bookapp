@@ -31,7 +31,7 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
     private Constants constants;
     private EditText etmail, etpass;
-    private TextView tvRegister;
+    private TextView tvRegister,  tvFogetPassword;
     private Button btnLogin;
 
     @Override
@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         etpass = findViewById(R.id.tvPassLogin);
         btnLogin = findViewById(R.id.btnLogin);
         tvRegister = findViewById(R.id.tvRegister);
+        tvFogetPassword= findViewById(R.id.tvFogortPass);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +62,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
+        tvFogetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, FogetPasswordActivity.class));
+
             }
         });
     }
