@@ -1,6 +1,7 @@
 package com.example.bookapp.Activity;
 
-import android.annotation.SuppressLint;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,75 +11,127 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.example.bookapp.Helper.Constants;
+import com.example.bookapp.Helper.SharedPrefManager;
+import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
+    private Constants constants;
     private EditText etmail, etpass;
     private TextView tvRegister;
     private Button btnLogin;
-    private FirebaseAuth mAuth;
-    private Intent intent;
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signin);
-        mAuth= FirebaseAuth.getInstance();
+        setContentView(R.layout.activity_login);
 
-         etmail = findViewById(R.id.tvEmail);
-         etpass = findViewById(R.id.tvPass);
-         btnLogin= findViewById(R.id.btnLogin);
-         tvRegister = findViewById(R.id.tvRegister);
 
-         btnLogin.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 login();
-             }
-         });
-        /* tvRegister.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 register();
-             }
-         });*/
-    }
-    /*private void register(){
-        intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(intent);
-    }*/
-    private void login(){
-        String email, password;
-        email = etmail.getText().toString();
-        password= etpass.getText().toString();
-
-        if(TextUtils.isEmpty(email)){
-            Toast.makeText(this, "Vui lòng nhập email !",Toast.LENGTH_SHORT).show();
-            return;
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
         }
-        if(TextUtils.isEmpty(password)){
-            Toast.makeText(this, "Vui lòng nhập password !",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+        etmail = findViewById(R.id.tvEmailLogin);
+        etpass = findViewById(R.id.tvPassLogin);
+        btnLogin = findViewById(R.id.btnLogin);
+        tvRegister = findViewById(R.id.tvRegister);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Đăng nhập thành công",Toast.LENGTH_SHORT).show();
-                    intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }else {
-                    Toast.makeText(getApplicationContext(), "Đăng nhập không thành công",Toast.LENGTH_SHORT).show();
-
-                }
+            public void onClick(View view) {
+                login();
             }
         });
+
+        tvRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
+    }
+
+    private void login() {
+        String email, password;
+        email = etmail.getText().toString();
+        password = etpass.getText().toString();
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(this, "Vui lòng nhập email !", Toast.LENGTH_SHORT).show();
+            etmail.requestFocus();
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Vui lòng nhập password !", Toast.LENGTH_SHORT).show();
+            etpass.requestFocus();
+            return;
+        }
+
+
+        //If everything is fine
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:5000/api/auth/login",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //converting response to json object
+                            JSONObject obj = new JSONObject(response);
+                            //if no error in response
+                            if (obj.getInt("err") == 0) {
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                                //getting the user from the response
+//                                JSONObject userJson = obj.getJSONObject("user");
+
+                                // TODO: Get user data from response
+                                //creating a new user object
+//                                User user = new User(
+//                                        userJson.getInt("id"),
+//                                        userJson.getString("username"),
+//                                        userJson.getString("email"),
+//                                        userJson.getString("gender"),
+//                                        userJson.getString("images")
+//                                );
+//                                //storing the user in shared preferences
+//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            } else {
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("password", password);
+                return params;
+            }
+        };
+        VolleySingle.getInstance(this).addToRequestQueue(stringRequest);
+
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="ĐANG ĐỌC"
+        android:id="@+id/reading"/>
+    <item android:title="CHƯA ĐỌC"
+        android:id="@+id/unread"/>
+    <item android:title="ĐÃ ĐỌC"
+        android:id="@+id/done"/>
+
+</menu>

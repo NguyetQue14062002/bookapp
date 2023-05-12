@@ -105,7 +105,43 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
+                    android:layout_gravity="center"
                     app:srcCompat="@drawable/image_21" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_weight="3"
+                        android:text="Danh mục"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1"
+                        android:text="Xem Tất cả"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp">
+
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -114,13 +150,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvContinue"
+                        android:id="@+id/tvAllBooks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="32dp"
                         android:layout_marginEnd="32dp"
                         android:layout_weight="3"
-                        android:text="Tiếp tục đọc"
+                        android:text="Tất cả sách"
                         android:textColor="@color/black"
                         android:textSize="16dp"
                         android:textStyle="normal" />
@@ -131,52 +167,20 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
                         android:layout_weight="1"
-                        android:text="Tất cả"
+                        android:text="Xem Tất cả"
                         android:textAlignment="center" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcReading"
+                    android:id="@+id/rcAllBooks"
                     android:layout_width="379dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp">
+                    android:layout_margin="16dp"
+                    tools:listitem="@layout/viewholder_book">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tvBookTrend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_weight="3"
-                        android:text="Tiếp tục đọc"
-                        android:textColor="@color/black"
-                        android:textSize="16dp"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:layout_weight="1"
-                        android:text="Tất cả"
-                        android:textAlignment="center" />
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcTrend"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp">
-
-                </androidx.recyclerview.widget.RecyclerView>
 
             </LinearLayout>
         </ScrollView>
