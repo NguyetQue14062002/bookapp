@@ -1,5 +1,6 @@
 package com.example.bookapp.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,7 +16,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.example.bookapp.Activity.LoginActivity;
+import com.example.bookapp.Activity.MainActivity;
+import com.example.bookapp.Activity.ProfileActivity;
 import com.example.bookapp.Adapter.BookAdapter;
 import com.example.bookapp.Adapter.CategoryAdapter;
 import com.example.bookapp.Domain.Book;
@@ -66,6 +73,7 @@ public class HomeFragment extends Fragment  {
     private TextView tvHi;
 
     private ArrayList<Book> books;
+    private ArrayList<Book> bookSearch;
     private ArrayList<Category> categories;
 
     private BookAdapter bookAdapter;
@@ -75,6 +83,7 @@ public class HomeFragment extends Fragment  {
 
     private RecyclerView categoryRecyclerView;
     private EditText etSearch;
+    private ImageView image, imgSearch;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -107,12 +116,23 @@ public class HomeFragment extends Fragment  {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView= inflater.inflate(R.layout.fragment_home, container, false);
+        ImageView profile = (ImageView) rootView.findViewById(R.id.imageUserHome);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToAttractProfile();
+            }
+        });
+
+        return rootView;
+
     }
 
 
@@ -125,9 +145,11 @@ public class HomeFragment extends Fragment  {
         super.onViewCreated(view, savedInstanceState);
 
         books = new ArrayList<>();
+
         booksRecyclerView = view.findViewById(R.id.rcAllBooks);
         booksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         bookAdapter = new BookAdapter(getContext(), books);
+
         booksRecyclerView.setAdapter(bookAdapter);
         getAllBooks(view);
 
@@ -137,17 +159,29 @@ public class HomeFragment extends Fragment  {
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         categoryAdapter = new CategoryAdapter(getContext(), categories);
         categoryRecyclerView.setAdapter(categoryAdapter);
+
         getCategories(view);
-
-
 
         tvHi = view.findViewById(R.id.tvHello);
         etSearch = view.findViewById(R.id.tvSearch);
+        image= view.findViewById(R.id.imageUserHome);
 
-
-        tvHi.setText("Chào "+ SharedPrefManager.getInstance(getActivity()).getUser().getFull_name());
-
-
+        getData();
+        if (SharedPrefManager.getInstance(getActivity()).getUser().getAvatar() == null)
+            image.setImageResource(R.drawable.defautavt);
+        else
+            Glide.with(this).load(SharedPrefManager.getInstance(getActivity()).getUser().getAvatar()).into(image);
+        imgSearch= view.findViewById(R.id.imgSearchBook);
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bookSearch = new ArrayList<>();
+                bookAdapter = new BookAdapter(getContext(), bookSearch);
+                bookAdapter = new BookAdapter(getContext(), books);
+                booksRecyclerView.setAdapter(bookAdapter);
+                GetSearch();
+            }
+        });
     }
 
 
@@ -239,5 +273,97 @@ public class HomeFragment extends Fragment  {
         );
         VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequest);
 
+    }
+    public void goToAttractProfile(){
+        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+        startActivity(intent);
+    }
+    private void getData() {
+        // String Request initialized
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, " http://10.0.2.2:5000/api/user", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    //converting response to json object
+                    JSONObject obj = new JSONObject(response);
+                    //if no error in response
+                    if (obj.getInt("err") == 0) {
+                        JSONObject userJson = obj.getJSONObject("userData");
+                        String fullname= userJson.getString("full_name");
+                        tvHi.setText(fullname);
+
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null) {
+                    Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                String access_token = SharedPrefManager.getInstance(getActivity()).getUser().getAccess_token();
+                headers.put("Authorization",  access_token);
+                return headers;
+            }
+        };
+
+        VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequest);
+    }
+    public void GetSearch(){
+        String key= etSearch.getText().toString();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/book/?search_key="+key,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            //converting response to json object
+                            JSONObject obj = new JSONObject(response);
+                            if (obj.getInt("err") == 0) {
+                                JSONObject data = obj.getJSONObject("data");
+                                JSONArray allBooks = data.getJSONArray("rows");
+                                for (int i = 0; i < allBooks.length(); i++) {
+                                    JSONObject object = allBooks.getJSONObject(i);
+
+                                    Book book = new Book(
+                                            object.getInt("id"),
+                                            object.getInt("category_id"),
+                                            object.getInt("status_id"),
+                                            -1,
+                                            object.getString("author"),
+                                            object.getString("description"),
+                                            object.getString("image_url"),
+                                            object.getString("link"),
+                                            object.getString("title")
+                                    );
+                                    bookSearch.add(book);
+                                }
+                                bookAdapter.setBooks(bookSearch);
+                                bookAdapter.notifyDataSetChanged();
+                                Log.d("booksearch", String.valueOf(bookSearch.size()));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
 }

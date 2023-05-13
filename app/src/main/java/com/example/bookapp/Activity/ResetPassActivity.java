@@ -56,8 +56,8 @@ public class ResetPassActivity extends AppCompatActivity {
         String password_confirm= confirmpass.getText().toString();
         if (!password.equals(password_confirm)) {
             Toast.makeText(this, "Mat khau khong giong nhau !", Toast.LENGTH_SHORT).show();
-           confirmpass.clearComposingText();
-           confirmpass.requestFocus();
+            confirmpass.clearComposingText();
+            confirmpass.requestFocus();
             return;
         }
         StringRequest putRequest = new StringRequest(Request.Method.PUT, url,

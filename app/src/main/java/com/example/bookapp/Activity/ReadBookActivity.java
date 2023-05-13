@@ -47,65 +47,26 @@ public class ReadBookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_readbook);
 
         WebView webView = findViewById(R.id.web);
-        imgexit= findViewById(R.id.exitReadBook);
+        imgexit = findViewById(R.id.exitReadBook);
         tvNameBook = findViewById(R.id.tvNameBookDeading);
         imgexit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ReadBookActivity.this,BookDetailActivity.class));
+                startActivity(new Intent(ReadBookActivity.this, BookDetailActivity.class));
             }
         });
         Intent intent = getIntent();
-        String idBook = intent.getStringExtra("id");
-        String url ="http://10.0.2.2:5000/api/book/?id="+idBook;
-//        webView.loadUrl("https://thuviensach.vn/pdf/viewer.php?id=23d3de");
-//        //Todo gọi Api url Sách
-//
-//        webView.getSettings().setJavaScriptEnabled(true);
-//
-//
-//        webView.setWebViewClient(new WebViewClient());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    //converting response to json object
-                    JSONObject obj = new JSONObject(response);
-                    //if no error in response
-                    if (obj.getInt("err") == 0) {
+        String url = intent.getStringExtra("link");
+        String name = intent.getStringExtra("title");
+        tvNameBook.setText(name);
+        webView.loadUrl(url);
 
-                        JSONObject bookJson = obj.getJSONObject("data");
-                        JSONArray rowJson=bookJson.getJSONArray("rows");
-                        String url = "";
-                        String name = "";
-                        for (int i=0; i< rowJson.length(); i++) {
-                            JSONObject jsonInner = rowJson.getJSONObject(i);
-                            url =  jsonInner.getString("link");
-                            name = jsonInner.getString("title");
-                        }
-                        webView.loadUrl(url);
-                        tvNameBook.setText(name);
-                        //Todo gọi Api url Sách
+        webView.getSettings().setJavaScriptEnabled(true);
 
-                        webView.getSettings().setJavaScriptEnabled(true);
-                        webView.setWebViewClient(new WebViewClient());
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        },new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() != null) {
-                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-        );
 
-        VolleySingle.getInstance(this).addToRequestQueue(stringRequest);
+        webView.setWebViewClient(new WebViewClient());
     }
+
 
 }
 

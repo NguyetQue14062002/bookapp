@@ -1,14 +1,22 @@
 package com.example.bookapp.Fragment;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+
+import android.content.IntentFilter;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,17 +27,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.bookapp.Activity.CreatePostActivity;
-import com.example.bookapp.Activity.MainActivity;
-import com.example.bookapp.Activity.PostActivity;
+import com.example.bookapp.Activity.PostDetailActivity;
 import com.example.bookapp.Adapter.PostAdapter;
 import com.example.bookapp.Domain.Post;
+import com.example.bookapp.Domain.User;
+import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
 
@@ -50,6 +56,9 @@ public class CommunityFragment extends Fragment {
     private ImageView ivNewPost;
     private RecyclerView rvPosts;
 
+    ActivityResultLauncher<Intent> activityResultLauncher;
+
+
     public CommunityFragment() {
         // Required empty public constructor
     }
@@ -59,36 +68,36 @@ public class CommunityFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_community, container, false);
-        rvPosts = v.findViewById(R.id.rvPosts);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        rvPosts.setLayoutManager(layoutManager);
-        postAdapter = new PostAdapter();
-        rvPosts.setAdapter(postAdapter);
-        getPosts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Post>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        // Khởi tạo
-                    }
-
-                    @Override
-                    public void onNext(List<Post> posts) {
-                        // Xử lý dữ liệu và cập nhật Adapter
-                        postAdapter.setPosts(posts);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        // Xử lý lỗi
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        // Hoàn thành
-                    }
-                });
+        if (SharedPrefManager.getInstance(getActivity()).isLoggedIn()) {
+            User user = SharedPrefManager.getInstance(getActivity()).getUser();
+            rvPosts = v.findViewById(R.id.rvPosts);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+            rvPosts.setLayoutManager(layoutManager);
+            postAdapter = new PostAdapter(getActivity(), user.getAccess_token());
+            rvPosts.setAdapter(postAdapter);
+            getPosts(user)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<List<Post>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            // Khởi tạo
+                        }
+                        @Override
+                        public void onNext(List<Post> posts) {
+                            // Xử lý dữ liệu và cập nhật Adapter
+                            postAdapter.setPosts(posts);
+                        }
+                        @Override
+                        public void onError(Throwable e) {
+                            // Xử lý lỗi
+                        }
+                        @Override
+                        public void onComplete() {
+                            // Hoàn thành
+                        }
+                    });
+        }
         return v;
     }
 
@@ -110,21 +119,58 @@ public class CommunityFragment extends Fragment {
 
         postAdapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Post post) {
+            public void onItemClick(Post post, int position) {
                 // Xử lý sự kiện click vào post
-                Intent intent = new Intent(getActivity(), PostActivity.class);
+                Intent intent = new Intent(getActivity(), PostDetailActivity.class);
                 intent.putExtra("post_id", post.getId());
-                startActivity(intent);
+                intent.putExtra("post_user", post.getUser());
+                intent.putExtra("post_tcontent", post.getTcontent());
+                intent.putExtra("post_image", post.getImage());
+                intent.putExtra("post_status_id", post.getStatus_id());
+                intent.putExtra("post_num_likes", post.getNumLikes());
+                intent.putExtra("post_num_comments", post.getNumComments());
+                intent.putExtra("is_liked", post.getLiked());
+                intent.putExtra("position", position);
+                intent.putExtra("avatar", post.getAvatar());
+                activityResultLauncher.launch(intent);
             }
         });
-
-        // TODO: Initial Data and Create Layout Manager for postsRecyclerView
     }
 
-    public Observable<List<Post>> getPosts() {
-        List<Post> listPosts = new ArrayList<>();
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK ) {
+                        Intent data = result.getData();
+                        int postId = data.getIntExtra("post_id", 0);
+                        int numLikes = data.getIntExtra("post_num_likes", 0);
+                        int numComments = data.getIntExtra("post_num_comments", 0);
+                        int position = data.getIntExtra("position", -1);
+                        Boolean isLiked = data.getBooleanExtra("is_liked", false);
+
+                        if (position != -1 && postAdapter.getItemCount() > position) {
+                            // Update the like and comment count for the corresponding item in the adapter
+                            Post post = postAdapter.getItem(position);
+                            post.setNumLikes(numLikes);
+                            post.setNumComments(numComments);
+                            post.setLiked(isLiked);
+                            postAdapter.notifyItemChanged(position);
+                        }
+                    }
+                }
+        );
+    }
+
+
+    public Observable<List<Post>> getPosts(User user) {
         return Observable.create(emitter -> {
-            StringRequest stringRequestPost = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/post/",
+            List<Post> listPosts = new ArrayList<>();
+
+            StringRequest stringRequestPost = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/post?order[]=id&order[]=DESC",
                     response -> {
                         try {
                             JSONObject obj = new JSONObject(response);
@@ -132,230 +178,145 @@ public class CommunityFragment extends Fragment {
                             JSONArray postsJson = data.getJSONArray("rows");
 
                             if (obj.getInt("err") == 0) {
+                                List<Observable<Post>> observables = new ArrayList<>();
+
                                 for (int i = 0; i < postsJson.length(); i++) {
                                     JSONObject postJson = postsJson.getJSONObject(i);
                                     Post post = new Post();
                                     post.setId(postJson.getInt("id"));
                                     JSONObject userJson = postJson.getJSONObject("user");
                                     post.setUser(userJson.getString("full_name"));
+                                    post.setAvatar(userJson.getString("avatar"));
                                     post.setTcontent(postJson.getString("tcontent"));
                                     post.setImage(postJson.getString("image"));
                                     post.setStatus_id(postJson.getInt("status_id"));
-                                    // Gọi API lấy danh sách like
-                                    StringRequest stringRequestLike = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/like?post_id=" + post.getId(),
-                                            responseLike -> {
-                                                try {
-                                                    JSONObject objLike = new JSONObject(responseLike);
-                                                    JSONObject dataLike = objLike.getJSONObject("data");
-                                                    int numLikes = dataLike.getInt("count");
-                                                    if (objLike.getInt("err") == 0) {
-                                                        post.setNumLikes(numLikes);
-                                                        post.setNumLikes(numLikes);
-                                                        postAdapter.notifyDataSetChanged();
+
+                                    Observable<Post> likeObservable = Observable.create(likeEmitter -> {
+                                        StringRequest stringRequestLike = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/like?status_id=6&post_id=" + String.valueOf(post.getId()),
+                                                responseLike -> {
+                                                    try {
+                                                        JSONObject objLike = new JSONObject(responseLike);
+                                                        JSONObject dataLike = objLike.getJSONObject("data");
+                                                        int numLikes = dataLike.getInt("count");
+                                                        if (objLike.getInt("err") == 0) {
+                                                            post.setNumLikes(numLikes);
+                                                        }
+                                                        likeEmitter.onNext(post);
+                                                        likeEmitter.onComplete();
+                                                    } catch (Exception e) {
+                                                        likeEmitter.onError(e);
                                                     }
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            },
-                                            error -> {
-                                                if (error.getMessage() != null) {
-                                                    Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+                                                },
+                                                error -> {
+                                                    likeEmitter.onError(error);
+                                                });
 
-                                    VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequestLike);
+                                        VolleySingle.getInstance(getActivity()).addToRequestQueue(stringRequestLike);
+                                    });
 
-                                    // Gọi API lấy danh sách comment
-                                    StringRequest stringRequestComment = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/comment?post_id=" + post.getId(),
-                                            responseComment -> {
-                                                try {
-                                                    JSONObject objComment = new JSONObject(responseComment);
-                                                    JSONObject dataComment = objComment.getJSONObject("data");
-                                                    int numComments = dataComment.getInt("count");
-                                                    if (objComment.getInt("err") == 0) {
-                                                        post.setNumComments(numComments);
-                                                        postAdapter.notifyDataSetChanged();
+                                    Observable<Post> statusLikeObservable = Observable.create(statusLikeEmitter -> {
+                                        StringRequest stringRequestLikeUser = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/like?post_id=" + String.valueOf(post.getId()) + "&user_id=" + String.valueOf(user.getId()),
+                                                responseLikeUser -> {
+                                                    try {
+                                                        JSONObject objLikeUser = new JSONObject(responseLikeUser);
+                                                        JSONObject dataLikeUser = objLikeUser.getJSONObject("data");
+                                                        int numLikesUser = dataLikeUser.getInt("count");
+                                                        JSONArray rowsLikeUser = dataLikeUser.getJSONArray("rows");
+                                                        if (objLikeUser.getInt("err") == 0) {
+                                                            JSONObject rowLikeUser = rowsLikeUser.optJSONObject(0);
+                                                            if (rowLikeUser != null) {
+                                                                Integer status_id = rowLikeUser.getInt("status_id");
+                                                                if (status_id == 6) {
+                                                                    post.setLiked(true);
+                                                                } else if (status_id == 8) {
+                                                                    post.setLiked(false);
+                                                                }
+                                                            }
+                                                        }
+                                                        statusLikeEmitter.onNext(post);
+                                                        statusLikeEmitter.onComplete();
+                                                    } catch (Exception e) {
+                                                        statusLikeEmitter.onError(e);
                                                     }
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            },
-                                            error -> {
-                                                if (error.getMessage() != null) {
-                                                    Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+                                                },
+                                                error -> {
+                                                    statusLikeEmitter.onError(error);
+                                                });
+                                        VolleySingle.getInstance(getActivity()).addToRequestQueue(stringRequestLikeUser);
+                                    });
 
-                                    VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequestComment);
-
-                                    // Gọi API lấy danh sách share
-                                    StringRequest stringRequestShare = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/share?post_id=" + post.getId(),
-                                            responseShare -> {
-                                                try {
-                                                    JSONObject objShare = new JSONObject(responseShare);
-                                                    JSONObject dataShare = objShare.getJSONObject("data");
-                                                    int numShares = dataShare.getInt("count");
-                                                    if (objShare.getInt("err") == 0) {
-                                                        post.setNumShares(numShares);
-                                                        postAdapter.notifyDataSetChanged();
+                                    Observable<Post> commentObservable = Observable.create(commentEmitter -> {
+                                        StringRequest stringRequestComment = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/comment?status_id=6&post_id=" + String.valueOf(post.getId()),
+                                                responseComment -> {
+                                                    try {
+                                                        JSONObject objComment = new JSONObject(responseComment);
+                                                        JSONObject dataComment = objComment.getJSONObject("data");
+                                                        int numComments = dataComment.getInt("count");
+                                                        if (objComment.getInt("err") == 0) {
+                                                            post.setNumComments(numComments);
+                                                        }
+                                                        commentEmitter.onNext(post);
+                                                        commentEmitter.onComplete();
+                                                    } catch (Exception e) {
+                                                        commentEmitter.onError(e);
                                                     }
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            },
-                                            error -> {
-                                                if (error.getMessage() != null) {
-                                                    Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+                                                },
+                                                error -> {
+                                                    commentEmitter.onError(error);
+                                                });
+                                        VolleySingle.getInstance(getActivity()).addToRequestQueue(stringRequestComment);
+                                    });
 
-                                    VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequestShare);
+                                    observables.add(likeObservable);
+                                    observables.add(statusLikeObservable);
+                                    observables.add(commentObservable);
+
                                     listPosts.add(post);
-
                                 }
+
+                                Observable.zip(observables, objects -> listPosts)
+                                        .subscribe(posts -> {
+                                            emitter.onNext(posts);
+                                            emitter.onComplete();
+                                        }, error -> emitter.onError(error));
+                            } else {
+                                emitter.onNext(listPosts);
+                                emitter.onComplete();
                             }
-                            emitter.onNext(listPosts);
-                            emitter.onComplete();
                         } catch (Exception e) {
                             emitter.onError(e);
                         }
                     },
                     error -> {
-                        if (error.getMessage() != null) {
-                            emitter.onError(error);
-                        }
+                        emitter.onError(error);
                     });
 
             VolleySingle.getInstance(getActivity()).addToRequestQueue(stringRequestPost);
         });
     }
 
+    private BroadcastReceiver reloadReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action != null && action.equals("com.example.bookapp.RELOAD_DATA")) {
+                postAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 
-//    public List<Post> getPosts () {
-//        List<Post> listPosts = new ArrayList<>();
-//        StringRequest stringRequestPost = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/post/",
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        try {
-//                            JSONObject obj = new JSONObject(response);
-//                            JSONObject data = obj.getJSONObject("data");
-//                            JSONArray postsJson = data.getJSONArray("rows");
-//
-//                            if (obj.getInt("err") == 0) {
-//                                for (int i = 0; i < postsJson.length(); i++) {
-//                                    JSONObject postJson = postsJson.getJSONObject(i);
-//                                    Post post = new Post();
-//                                    post.setId(postJson.getInt("id"));
-//                                    JSONObject userJson = postJson.getJSONObject("user");
-//                                    post.setUser(userJson.getString("full_name"));
-//                                    post.setTcontent(postJson.getString("tcontent"));
-//                                    post.setImage(postJson.getString("image"));
-//                                    post.setStatus_id(postJson.getInt("status_id"));
-//                                    StringRequest stringRequestLike = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/like?id=" + post.getId(),
-//                                            new Response.Listener<String>() {
-//                                                @Override
-//                                                public void onResponse(String response) {
-//                                                    try {
-//                                                        JSONObject obj = new JSONObject(response);
-//                                                        JSONObject data = obj.getJSONObject("data");
-//                                                        Integer num_likes = data.getInt("count");
-//                                                        if (obj.getInt("err") == 0) {
-//                                                            post.setNumLikes(num_likes);
-//                                                        }
-//                                                    } catch (Exception e) {
-//                                                        e.printStackTrace();
-//                                                    }
-//                                                }
-//                                            }
-//                                            , new Response.ErrorListener() {
-//                                        @Override
-//                                        public void onErrorResponse(VolleyError error) {
-//                                            if (error.getMessage() != null) {
-//                                                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }
-//
-//                                    });
-//                                    VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequestLike);
-//
-//                                    StringRequest stringRequestComment = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/comment?id=" + post.getId(),
-//                                            new Response.Listener<String>() {
-//                                                @Override
-//                                                public void onResponse(String response) {
-//                                                    try {
-//                                                        JSONObject obj = new JSONObject(response);
-//                                                        JSONObject data = obj.getJSONObject("data");
-//                                                        Integer num_comments = data.getInt("count");
-//                                                        if (obj.getInt("err") == 0) {
-//                                                            post.setNumComments(num_comments);
-//                                                        }
-//                                                    } catch (Exception e) {
-//                                                        e.printStackTrace();
-//                                                    }
-//                                                }
-//                                            }
-//                                            , new Response.ErrorListener() {
-//                                        @Override
-//                                        public void onErrorResponse(VolleyError error) {
-//                                            if (error.getMessage() != null) {
-//                                                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }
-//
-//                                    });
-//                                    VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequestComment);
-//
-//                                    StringRequest stringRequestShare = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/share?id=" + post.getId(),
-//                                            new Response.Listener<String>() {
-//                                                @Override
-//                                                public void onResponse(String response) {
-//                                                    try {
-//                                                        JSONObject obj = new JSONObject(response);
-//                                                        JSONObject data = obj.getJSONObject("data");
-//                                                        Integer num_shares = data.getInt("count");
-//                                                        if (obj.getInt("err") == 0) {
-//                                                            post.setNumShares(num_shares);
-//                                                        }
-//                                                    } catch (Exception e) {
-//                                                        e.printStackTrace();
-//                                                    }
-//                                                }
-//                                            }
-//                                            , new Response.ErrorListener() {
-//                                        @Override
-//                                        public void onErrorResponse(VolleyError error) {
-//                                            if (error.getMessage() != null) {
-//                                                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }
-//
-//                                    });
-//                                    VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequestShare);
-//
-//                                    listPosts.add(post);
-//
-//                                }
-//
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//                , new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                if (error.getMessage() != null) {
-//                    Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//        });
-//        VolleySingle.getInstance(getActivity()).addToRequestQueue(stringRequestPost);
-//        return listPosts;
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Đăng ký BroadcastReceiver
+        IntentFilter intentFilter = new IntentFilter("com.example.bookapp.RELOAD_DATA");
+        getActivity().registerReceiver(reloadReceiver, intentFilter);
+    }
 
-
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Hủy đăng ký BroadcastReceiver
+        getActivity().unregisterReceiver(reloadReceiver);
+    }
 }

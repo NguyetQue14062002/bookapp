@@ -74,6 +74,7 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
 
         //TODO: updateHistory
         holder.updateBtn.setOnClickListener(new View.OnClickListener() {
+            int status_id;
             @Override
             public void onClick(View view) {
                 //Creating the instance of PopupMenu
@@ -93,20 +94,20 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
 
                         switch (item.getItemId()) {
                             case R.id.reading:
-                                book.setStatus_id(4);
+                                status_id = 4;
                                 break;
 
                             case R.id.done:
-                                book.setStatus_id(5);
+                                status_id=5;
                                 break;
 
                             case R.id.unread:
-                                book.setStatus_id(3);
+                                status_id=3;
                                 break;
 
                         }
 
-                        updateHistory(book);
+                        updateHistory(book, status_id);
 
                         return true;
                     }
@@ -138,11 +139,11 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
         }
     }
 
-    private void updateHistory(Book book) {
+    private void updateHistory(Book book, int status_id) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("book_id", book.getId());
-            jsonObject.put("status_id", book.getStatus_id());
+            jsonObject.put("status_id", status_id);
         } catch(Exception e) {
 
         }
@@ -199,7 +200,7 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
 
         }
 
-        JsonObjectRequest request = new JsonObjectRequest (Request.Method.DELETE, "http://10.0.2.2:5000/api/history/", jsonObject,
+        JsonObjectRequest request = new JsonObjectRequest (Request.Method.POST, "http://10.0.2.2:5000/api/history/delete", jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

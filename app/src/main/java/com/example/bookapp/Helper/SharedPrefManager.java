@@ -6,6 +6,11 @@ import android.content.SharedPreferences;
 
 import com.example.bookapp.Activity.LoginActivity;
 import com.example.bookapp.Domain.User;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class SharedPrefManager {
     /*
@@ -29,6 +34,11 @@ public class SharedPrefManager {
 
     private static final String KEY_ACCESS_TOKEN = "key_access_token";
     private static final String KEY_REFRESH_TOKEN = "key_refresh_token";
+
+    private static final String KEY_HISTORY = "key_history";
+    //History se chua cac id cua sach da co history
+
+
     private  static SharedPrefManager mInstance;
     private static Context ctx;
 
@@ -95,6 +105,23 @@ public class SharedPrefManager {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_AVATAR, profileImage);
+        editor.apply();
+    }
+
+    public ArrayList<Integer> getHistory() {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<Integer>>(){}.getType();
+        ArrayList<Integer> history = gson.fromJson(sharedPreferences.getString(KEY_HISTORY, null), type);
+        return history;
+    }
+
+
+    public void setHistory(ArrayList<Integer> history) {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        editor.putString(KEY_HISTORY, gson.toJson(history));
         editor.apply();
     }
 }

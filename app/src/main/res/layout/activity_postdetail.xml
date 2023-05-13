@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:weightSum="15"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/scrollView4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="14"
         app:layout_constraintBottom_toTopOf="@+id/linearLayoutCmt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,6 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_marginTop="20dp"
+                android:weightSum="7"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -38,7 +41,7 @@
                     android:id="@+id/imgAvatar"
                     android:layout_width="20dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:adjustViewBounds="false"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/avata" />
@@ -47,7 +50,7 @@
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:orientation="vertical">
 
                     <TextView
@@ -79,7 +82,7 @@
             <LinearLayout
                 android:id="@+id/LinearContent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
@@ -88,8 +91,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="sfhfbksvkajvalsjncams,c jefnjefn,samc ,alwifqlwifnlaksf. vkalefqlekfamflksnfjsdkfnwiewlfqqkelgmwlkfjpqwopqfhewfnsd.vlsmvskvmslvkmslkvmslvsdkvslvknslkvnsvlsndvs"
-                    android:textAlignment="center" />
+                    android:text="sfhfbksvkajvalsjncams,c jefnjefn,samc ,alwifqlwifnlaksf. vkalefqlekfamflksnfjsdkfnwiewlfqqkelgmwlkfjpqwopqfhewfnsd.vlsmvskvmslvkmslkvmslvsdkvslvknslkvnsvlsndvs" />
 
                 <ImageView
                     android:id="@+id/postImage"
@@ -105,6 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
+                android:weightSum="2"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -112,7 +115,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/baseline_favorite_border_24" />
+                    app:srcCompat="@drawable/ic_unlike" />
 
                 <ImageView
                     android:id="@+id/imgComment"
@@ -121,17 +124,18 @@
                     android:layout_weight="1"
                     app:srcCompat="@drawable/baseline_insert_comment_24" />
 
-                <ImageView
-                    android:id="@+id/imgShare"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/baseline_share_24" />
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/imgShare"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_weight="1"-->
+                <!--                    app:srcCompat="@drawable/baseline_share_24" />-->
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:weightSum="4"
                 android:orientation="horizontal">
 
                 <TextView
@@ -146,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:text="Yêu thích" />
 
                 <TextView
@@ -161,7 +165,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:text="Bình luận" />
 
                 <TextView
@@ -172,18 +176,18 @@
                     android:text="7"
                     android:textAlignment="textEnd" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_weight="2"
-                    android:text="Chia sẻ" />
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="5dp"-->
+                <!--                    android:layout_weight="2"-->
+                <!--                    android:text="Chia sẻ" />-->
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcCmt"
                 android:layout_width="match_parent"
-                android:layout_height="217dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp" />
         </LinearLayout>
     </ScrollView>
@@ -195,6 +199,7 @@
         android:layout_margin="10dp"
         android:background="@drawable/btnsearch_background"
         android:orientation="horizontal"
+        android:layout_weight="1"
         android:weightSum="5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

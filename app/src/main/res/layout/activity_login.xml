@@ -121,7 +121,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <EditText
+            <TextView
                 android:id="@+id/editTextNewAcc2"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
@@ -129,7 +129,9 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="Bạn chưa có tài khoản?"
-                tools:ignore="TouchTargetSizeCheck" />
+                tools:ignore="TouchTargetSizeCheck"
+                android:textColor="@color/black"
+                android:textSize="19sp"/>
 
             <TextView
                 android:id="@+id/tvRegister"

@@ -3,8 +3,11 @@ package com.example.bookapp.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,9 +25,11 @@ import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +56,8 @@ public class LoginActivity extends AppCompatActivity {
         tvRegister = findViewById(R.id.tvRegister);
         tvFogetPassword= findViewById(R.id.tvFogortPass);
 
+        TextView txt = findViewById(R.id.editTextNewAcc2);
+        txt.setPaintFlags(txt.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,9 +126,18 @@ public class LoginActivity extends AppCompatActivity {
                                         obj.getString("access_token"),
                                         obj.getString("refresh_token")
                                 );
+
+                                //get history
+                                ArrayList<Integer> history = new ArrayList<>();
+                                JSONArray historyArray = obj.getJSONArray("history");
+                                for (int i = 0; i < historyArray.length(); i++) {
+                                    history.add(historyArray.getJSONObject(i).getInt("book_id"));
+                                }
                                 //storing the user in shared preferences
 
                                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                                SharedPrefManager.getInstance(getApplicationContext()).setHistory(history);
+                                Log.d("History", String.valueOf(history.size()));
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                             } else {

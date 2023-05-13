@@ -6,10 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".Activity.BookDetailActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/baseline_arrow_back_24" />
+
+        <ImageView
+            android:id="@+id/addToListBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:srcCompat="@drawable/baseline_add_24" />
+    </RelativeLayout>
+
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="80dp"
         android:background="@drawable/profile_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,28 +49,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/backBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    app:srcCompat="@drawable/baseline_arrow_back_24" />
-
-                <ImageView
-                    android:id="@+id/addToListBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    app:srcCompat="@drawable/baseline_add_24" />
-            </RelativeLayout>
 
             <ImageView
                 android:id="@+id/imgBook"
@@ -82,14 +88,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvYear"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Bloomsbury \n Publisher"
-                        android:textAlignment="center" />
-
-                    <TextView
                         android:id="@+id/textView12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -97,13 +95,6 @@
                         android:text="256 \n Pages"
                         android:textAlignment="center" />
 
-                    <TextView
-                        android:id="@+id/textView14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="187 \n Downloads"
-                        android:textAlignment="center" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -119,32 +110,15 @@
         </LinearLayout>
     </ScrollView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <android.widget.Button
+        android:id="@+id/btnRead"
+        android:layout_width="133dp"
+        android:layout_height="53dp"
+        android:background="@color/black"
+        android:text="Đọc sách"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="50dp">
-
-        <android.widget.Button
-            android:id="@+id/btnRead"
-            android:layout_width="133dp"
-            android:layout_height="53dp"
-            android:layout_marginStart="40dp"
-            android:background="@color/black"
-            android:text="Đọc sách"
-            android:textColor="@color/white" />
-
-        <android.widget.Button
-            android:id="@+id/btnDownLoad"
-            android:layout_width="133dp"
-            android:layout_height="53dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="40dp"
-            android:background="@color/black"
-            android:text="Tải sách"
-            android:textColor="@color/white" />
-    </RelativeLayout>
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

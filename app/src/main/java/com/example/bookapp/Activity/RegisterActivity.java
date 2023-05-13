@@ -2,7 +2,9 @@ package com.example.bookapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,10 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
-    private TextView tvUserName, tvEmail, tvPhoneNumber, tvPassword, tvConfirmPass;
+    private TextView tvUserName, tvEmail, tvPhoneNumber, tvPassword, tvConfirmPass, login;
 
     private Button registerBtn;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +43,21 @@ public class RegisterActivity extends AppCompatActivity {
         tvPassword = findViewById(R.id.tvPassRegister);
         tvConfirmPass = findViewById(R.id.tvPassConfirm);
         registerBtn = findViewById(R.id.btnRegister);
-
+        login = findViewById(R.id.tvUILogin);
+        TextView txt = findViewById(R.id.editTextNewAcc);
+        txt.setPaintFlags(txt.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 register();
             }
         });
-
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            }
+        });
     }
 
     private void register() {

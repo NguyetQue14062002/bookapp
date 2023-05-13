@@ -2,28 +2,22 @@ package com.example.bookapp.Domain;
 
 import java.io.Serializable;
 
-public class Comment implements Serializable {
+public class Like implements Serializable {
 
-    //id, post_id, user_id, tcontent, status_id
+    //id, post_id, user_id, status_id
     private int id, post_id, user_id, status_id;
-    private String tcontent, user_name;
 
-    public Comment() {
-    }
-
-    public Comment(int post_id, int user_id, int status_id, String tcontent) {
+    public Like(int post_id, int user_id, int status_id) {
         this.post_id = post_id;
         this.user_id = user_id;
         this.status_id = status_id;
-        this.tcontent = tcontent;
     }
 
-    public Comment(int id, int post_id, int user_id, int status_id, String tcontent) {
+    public Like(int id, int post_id, int user_id, int status_id) {
         this.id = id;
         this.post_id = post_id;
         this.user_id = user_id;
         this.status_id = status_id;
-        this.tcontent = tcontent;
     }
 
     public int getId() {
@@ -57,20 +51,5 @@ public class Comment implements Serializable {
     public void setStatus_id(int status_id) {
         this.status_id = status_id;
     }
-
-    public String getTcontent() {
-        return tcontent;
-    }
-
-    public void setTcontent(String tcontent) {
-        this.tcontent = tcontent;
-    }
-
-    public String getUser_name() {
-        return user_name;
-    }
-
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
 }
+

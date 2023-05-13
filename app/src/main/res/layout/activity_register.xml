@@ -129,7 +129,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <EditText
+                <TextView
                     android:id="@+id/editTextNewAcc"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
@@ -138,10 +138,12 @@
                     android:ems="10"
                     android:inputType="textPersonName"
                     android:minHeight="48dp"
-                    android:text="Bạn đã có tài khoản? " />
+                    android:text="Bạn đã có tài khoản? "
+                    android:textColor="@color/black"
+                    android:textSize="19sp"/>
 
                 <TextView
-                    android:id="@+id/tvRegister"
+                    android:id="@+id/tvUILogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"

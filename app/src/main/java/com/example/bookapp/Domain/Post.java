@@ -4,10 +4,11 @@ import java.sql.Date;
 
 public class Post {
     private int id, status_id;
-    private String tcontent, image, user;
+    private String tcontent, image, user, avatar;
     private Date createAt;
     private Integer numLikes, numShares, numComments;
 
+    private Boolean isLiked;
     public Post(int id, String user, int status_id, String tcontent, String image, Date createAt, Integer numLikes, Integer numShares, Integer numComments) {
         this.id = id;
         this.user = user;
@@ -23,12 +24,28 @@ public class Post {
     public Post() {
     }
 
+    public Boolean getLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(Boolean liked) {
+        isLiked = liked;
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getUser() {
