@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Activity.BookDetailActivity;
 import com.example.bookapp.Domain.Book;
+import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
@@ -37,6 +38,11 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
 
     Context context;
     ArrayList<Book> books;
+
+
+    public void setBooks(ArrayList<Book> books) {
+        this.books = books;
+    }
 
     public BookLibraryAdapter(Context context, ArrayList<Book> books) {
         this.context = context;
@@ -135,13 +141,13 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
     private void updateHistory(Book book) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("book_id", 2);
-            jsonObject.put("status_id", 5);
+            jsonObject.put("book_id", book.getId());
+            jsonObject.put("status_id", book.getStatus_id());
         } catch(Exception e) {
 
         }
 
-        JsonObjectRequest request = new JsonObjectRequest (Request.Method.PUT, "http://10.0.2.2:5000/api/history", jsonObject,
+        JsonObjectRequest request = new JsonObjectRequest (Request.Method.PUT, "http://10.0.2.2:5000/api/history/", jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -186,21 +192,27 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
 
 //TODO: Delete history by bookID
 
-        StringRequest request = new StringRequest (Request.Method.DELETE, "http://10.0.2.2:5000/api/history/ids[0]="+2,
-                new Response.Listener<String>() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("book_id", book.getId());
+        } catch(Exception e) {
+
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest (Request.Method.DELETE, "http://10.0.2.2:5000/api/history/", jsonObject,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         try {
                             //converting response to json object
-                            JSONObject obj = new JSONObject(response);
                             //if no error in response
-                            if (obj.getInt("err") == 0) {
-                                Toast.makeText(context, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            if (response.getInt("err") == 0) {
+                                Toast.makeText(context, response.getString("message"), Toast.LENGTH_SHORT).show();
                                 //getting the user from the response
 
 
                             } else {
-                                Toast.makeText(context, obj.getString("message"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, response.getString("message"), Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

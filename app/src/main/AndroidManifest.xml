@@ -36,6 +36,12 @@
             android:name=".Activity.UpdateProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".Activity.OTPActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ReadBookActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.BookDetailActivity"
             android:exported="false" />
         <activity android:name=".Activity.MainActivity" />

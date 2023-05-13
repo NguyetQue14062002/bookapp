@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <EditText
-            android:id="@+id/textView16"
+            android:id="@+id/edPasswordNew"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/textbox_background"
@@ -39,7 +39,7 @@
             android:hint="Nhập mật khẩu" />
 
         <EditText
-            android:id="@+id/textView17"
+            android:id="@+id/edConfirm"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
@@ -48,7 +48,7 @@
             android:hint="Nhập lại mật khẩu" />
 
         <android.widget.Button
-            android:id="@+id/btnReset"
+            android:id="@+id/btnResetPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"

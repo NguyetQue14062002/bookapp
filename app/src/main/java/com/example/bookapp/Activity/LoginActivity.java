@@ -40,10 +40,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            finish();
-            startActivity(new Intent(this, MainActivity.class));
-        }
+//        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+//            finish();
+//            startActivity(new Intent(this, MainActivity.class));
+//        }
 
         etmail = findViewById(R.id.tvEmailLogin);
         etpass = findViewById(R.id.tvPassLogin);
@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         tvFogetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, FogetPasswordActivity.class));
+                startActivity(new Intent(LoginActivity.this, OTPActivity.class));
 
             }
         });
@@ -116,7 +116,8 @@ public class LoginActivity extends AppCompatActivity {
                                         avatar,
                                         userJson.getString("token"),
                                         userJson.getString("phone_number"),
-                                        obj.getString("access_token")
+                                        obj.getString("access_token"),
+                                        obj.getString("refresh_token")
                                 );
                                 //storing the user in shared preferences
 

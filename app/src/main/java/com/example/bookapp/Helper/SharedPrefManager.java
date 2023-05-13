@@ -28,7 +28,7 @@ public class SharedPrefManager {
     private static final String KEY_PASSWORD = "key_password";
 
     private static final String KEY_ACCESS_TOKEN = "key_access_token";
-
+    private static final String KEY_REFRESH_TOKEN = "key_refresh_token";
     private  static SharedPrefManager mInstance;
     private static Context ctx;
 
@@ -56,6 +56,7 @@ public class SharedPrefManager {
         editor.putString(KEY_PHONE_NUMBER, user.getPhone_number());
         editor.putString(KEY_TOKEN, user.getToken());
         editor.putString(KEY_ACCESS_TOKEN, user.getAccess_token());
+        editor.putString(KEY_REFRESH_TOKEN, user.getRefresh_token());
         editor.apply();
     }
 
@@ -76,7 +77,8 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_AVATAR, null),
                 sharedPreferences.getString(KEY_TOKEN, null),
                 sharedPreferences.getString(KEY_PHONE_NUMBER, null),
-                sharedPreferences.getString(KEY_ACCESS_TOKEN, null)
+                sharedPreferences.getString(KEY_ACCESS_TOKEN, null),
+                sharedPreferences.getString(KEY_REFRESH_TOKEN, null)
         );
     }
 

@@ -16,22 +16,24 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView14"
+            android:id="@+id/exitReadBook"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/baseline_keyboard_arrow_left_24" />
 
         <TextView
-            android:id="@+id/tvNameBook"
+            android:id="@+id/tvNameBookDeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
+            android:layout_marginBottom="5dp"
             android:layout_weight="5"
+            android:gravity="center"
             android:text="The Arsonist"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textStyle="bold" />
 
     </LinearLayout>

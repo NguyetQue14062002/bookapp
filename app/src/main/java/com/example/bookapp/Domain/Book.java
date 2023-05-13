@@ -12,6 +12,17 @@ public class Book implements Serializable {
         this.title = title;
     }
 
+    public Book(int id, int category_id, int status_id, String author, String description, String image_url, String link, String title) {
+        this.id = id;
+        this.category_id = category_id;
+        this.status_id = status_id;
+        this.author = author;
+        this.description = description;
+        this.image_url = image_url;
+        this.link = link;
+        this.title = title;
+    }
+
     public Book(int id, int category_id, int status_id, int publisher_id, String author, String description, String image_url, String link, String title) {
         this.id = id;
         this.category_id = category_id;

@@ -12,8 +12,9 @@ public class User implements Serializable {
     private String password;
 
     private String access_token;
+    private String refresh_token;
 
-    public User(int id, int role_id, String email, String full_name, String avatar, String token, String phone_number, String access_token) {
+    public User(int id, int role_id, String email, String full_name, String avatar, String token, String phone_number, String access_token, String refresh_token) {
         this.id = id;
         this.role_id = role_id;
         this.email = email;
@@ -22,6 +23,8 @@ public class User implements Serializable {
         this.token = token;
         this.phone_number = phone_number;
         this.access_token = access_token;
+        this.refresh_token =refresh_token;
+
     }
 
     public User(int id, int role_id, String email, String full_name, String avatar, String token, String phone_number) {
@@ -104,5 +107,13 @@ public class User implements Serializable {
 
     public void setAccess_token(String access_token) {
         this.access_token = access_token;
+    }
+
+    public String getRefresh_token() {
+        return refresh_token;
+    }
+
+    public void setRefresh_token(String refresh_token) {
+        this.refresh_token = refresh_token;
     }
 }

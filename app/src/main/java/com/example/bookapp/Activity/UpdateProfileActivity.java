@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,11 +19,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +42,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_updateprofile);
-
+        getData();
         if(SharedPrefManager.getInstance(this).isLoggedIn()) {
             quit= findViewById(R.id.exitProfile);
             dtFullname = findViewById(R.id.etFullnameProUpdate);
@@ -45,13 +50,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
             etEmail = findViewById(R.id.tvEmailProUpdate);
             avatarUpdate= findViewById(R.id.imageUpdatePro);
             btnUpdate= findViewById(R.id.btnUpdateIn4);
-
             User user= SharedPrefManager.getInstance(this).getUser();
             access_token = user.getAccess_token();
-            dtFullname.setText(user.getFull_name());
-            etEmail.setText(user.getEmail());
-            dtPhone.setText(user.getPhone_number());
-            Glide.with(this).load(user.getAvatar()).into(avatarUpdate);
+            if (user.getAvatar() == null)
+                avatarUpdate.setImageResource(R.drawable.defautavt);
+            else
+                Glide.with(this).load(user.getAvatar()).into( avatarUpdate);
 
             quit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -78,7 +82,20 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         // response
-                        Log.d("Response", response);
+
+                        try {
+                            //converting response to json object
+                            JSONObject obj = new JSONObject(response);
+                            //if no error in response
+                            if (obj.getInt("err") == 0) {
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                                startActivity( new Intent(UpdateProfileActivity.this, ProfileActivity.class));
+                            } else {
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener()
@@ -110,5 +127,50 @@ public class UpdateProfileActivity extends AppCompatActivity {
         };
 
         VolleySingle.getInstance(this).addToRequestQueue(putRequest);
+    }
+    private void getData() {
+
+
+        // String Request initialized
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, " http://10.0.2.2:5000/api/user", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    //converting response to json object
+                    JSONObject obj = new JSONObject(response);
+                    //if no error in response
+                    if (obj.getInt("err") == 0) {
+                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        //getting the user from the response
+                        JSONObject userJson = obj.getJSONObject("userData");
+                        String email= userJson.getString("email");
+                        String phone= userJson.getString("phone_number");
+                        String fullname= userJson.getString("full_name");
+                        etEmail.setText(email);
+                        dtFullname.setText(fullname);
+                        dtPhone.setText(phone);
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null) {
+                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization",  access_token);
+                return headers;
+            }
+        };
+
+        VolleySingle.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

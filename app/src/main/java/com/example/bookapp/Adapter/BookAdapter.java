@@ -24,6 +24,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     Context context;
     ArrayList<Book> books;
 
+    public void setBooks(ArrayList<Book> books) {
+        this.books = books;
+    }
+
     public BookAdapter(Context context, ArrayList<Book> books) {
         this.context = context;
         this.books = books;

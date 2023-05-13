@@ -10,6 +10,6 @@ public class FogetPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forgetpassword);
+        setContentView(R.layout.activity_sendotp);
     }
 }

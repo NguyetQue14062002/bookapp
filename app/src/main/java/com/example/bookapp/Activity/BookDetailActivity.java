@@ -73,39 +73,66 @@ public class BookDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //Creating the instance of PopupMenu
                 PopupMenu popup = new PopupMenu(BookDetailActivity.this, addToListBtn);
-                //Inflating the Popup using xml file
                 popup.getMenuInflater()
                         .inflate(R.menu.book_list, popup.getMenu());
 
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(
-                                BookDetailActivity.this,
-                                "You Clicked : " + item.getTitle(),
-                                Toast.LENGTH_SHORT
-                        ).show();
+                //TH1: Neu sach da co trong history roi
 
-                        switch (item.getItemId()) {
-                            case R.id.reading:
-                                book.setStatus_id(4);
-                                break;
+                if (book.getStatus_id() != 1 && book.getStatus_id() != 2) {
 
-                            case R.id.done:
-                                book.setStatus_id(5);
-                                break;
 
-                            case R.id.unread:
-                                book.setStatus_id(3);
-                                break;
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()) {
+                                case R.id.reading:
+                                    book.setStatus_id(4);
+                                    break;
 
+                                case R.id.done:
+                                    book.setStatus_id(5);
+                                    break;
+
+                                case R.id.unread:
+                                    book.setStatus_id(3);
+                                    break;
+
+                            }
+                            updateHistory();
+                            return true;
                         }
+                    });
+                } else {
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+                            Toast.makeText(
+                                    BookDetailActivity.this,
+                                    "You Clicked : " + item.getTitle(),
+                                    Toast.LENGTH_SHORT
+                            ).show();
 
-                        createHistory();
+                            switch (item.getItemId()) {
+                                case R.id.reading:
+                                    book.setStatus_id(4);
+                                    break;
 
-                        return true;
-                    }
-                });
+                                case R.id.done:
+                                    book.setStatus_id(5);
+                                    break;
+
+                                case R.id.unread:
+                                    book.setStatus_id(3);
+                                    break;
+
+                            }
+
+                            createHistory();
+
+                            return true;
+                        }
+                    });
+                }
+
 
                 popup.show(); //showing popup menu
 
@@ -124,9 +151,10 @@ public class BookDetailActivity extends AppCompatActivity {
         bookName.setText(book.getTitle());
         author.setText(book.getAuthor());
         description.setText(book.getDescription());
+
     }
 
-    private void createHistory() {
+    private void updateHistory() {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("book_id", book.getId());
@@ -135,7 +163,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
         }
 
-        JsonObjectRequest request = new JsonObjectRequest (Request.Method.POST, "http://10.0.2.2:5000/api/history", jsonObject,
+        JsonObjectRequest request = new JsonObjectRequest (Request.Method.PUT, "http://10.0.2.2:5000/api/history/", jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -168,7 +196,57 @@ public class BookDetailActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Authorization", currentUser.getToken());
+                params.put("Authorization", currentUser.getAccess_token());
+                return params;
+            }
+
+        };
+        VolleySingle.getInstance(this).addToRequestQueue(request);
+    }
+
+    private void createHistory() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("book_id", book.getId());
+            jsonObject.put("status_id", book.getStatus_id());
+        } catch(Exception e) {
+
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest (Request.Method.POST, "http://10.0.2.2:5000/api/history/", jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            //converting response to json object
+                            //if no error in response
+                            if (response.getInt("err") == 0) {
+                                Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
+                                //getting the user from the response
+
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.getMessage() != null) {
+                            Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", currentUser.getAccess_token());
                 return params;
             }
 
