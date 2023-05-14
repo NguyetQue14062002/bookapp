@@ -55,7 +55,6 @@ public class SettingsFragment extends Fragment {
     private TextView tvname, tvEmail;
     private ImageView avatar;
 
-    private LinearLayout profileSettings;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -120,12 +119,6 @@ public class SettingsFragment extends Fragment {
         tvEmail.setText(SharedPrefManager.getInstance(getActivity()).getUser().getEmail());
         Glide.with(this).load(SharedPrefManager.getInstance(getActivity()).getUser().getAvatar()).into(avatar);
 
-        profileSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), ProfileActivity.class));
-            }
-        });
     }
     public void goToAttractProfile()
     {

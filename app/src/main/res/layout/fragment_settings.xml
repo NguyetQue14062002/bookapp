@@ -26,8 +26,7 @@
                 android:layout_marginTop="10dp"
                 android:weightSum="5"
                 android:background="@drawable/profile_background"
-                android:orientation="horizontal"
-                android:id="@+id/profileSettings">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imageUserSetting"

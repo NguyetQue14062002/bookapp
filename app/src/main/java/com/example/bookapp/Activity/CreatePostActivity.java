@@ -94,8 +94,8 @@ public class CreatePostActivity extends AppCompatActivity {
                         Toast.makeText(CreatePostActivity.this, "Vui lòng điền nội dung để đăng bài!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    createBitmapPost(bitmap, access_token);
-                    createPost(access_token);
+                    uploadBitmap(bitmap);
+                    bitmap = null;
                 }
             });
 
@@ -216,11 +216,7 @@ public class CreatePostActivity extends AppCompatActivity {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public void createBitmapPost(final Bitmap bitmap, String access_token) {
-
-        if (bitmap == null) {
-            return;
-        }
+    public void uploadBitmap(final Bitmap bitmap) {
 
         String contentPost = tcontent.getText().toString();
         if (TextUtils.isEmpty(contentPost)) {
@@ -236,6 +232,8 @@ public class CreatePostActivity extends AppCompatActivity {
                             JSONObject obj = new JSONObject(new String(response.data));
                             Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                             finish();
+                            Intent intent = new Intent("com.example.bookapp.RELOAD_DATA");
+                            sendBroadcast(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -248,6 +246,7 @@ public class CreatePostActivity extends AppCompatActivity {
                         Log.e("GotError", "" + error.getMessage());
                     }
                 }) {
+
 
             @Override
             protected Map<String, DataPart> getByteData() {
@@ -275,52 +274,5 @@ public class CreatePostActivity extends AppCompatActivity {
 
         //adding the request to volley
         Volley.newRequestQueue(this).add(volleyMultipartRequest);
-    }
-
-    public void createPost(String access_token) {
-        String contentPost = tcontent.getText().toString();
-        if (TextUtils.isEmpty(contentPost)) {
-            Toast.makeText(this, "Hôm nay bạn nghĩ gì?", Toast.LENGTH_SHORT).show();
-            tcontent.requestFocus();
-            return;
-        }
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:5000/api/post/",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                            finish();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Lỗi tạo bài viết", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CreatePostActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e("GotError", "" + error.getMessage());
-                        finish();
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String,String>();
-                headers.put("Authorization", access_token);
-                return headers;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("tcontent", contentPost);
-                return params;
-            }
-        };
-        Volley.newRequestQueue(this).add(stringRequest);
     }
 }
