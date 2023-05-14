@@ -44,12 +44,23 @@
 
             <ImageView
                 android:id="@+id/imageUpdatePro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frameavtar_background"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center_horizontal"
                 app:srcCompat="@drawable/defautavt" />
 
-
+            <Button
+                android:id="@+id/btnChooseAvt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:layout_margin="20dp"
+                android:background="@drawable/btn_background"
+                android:text="Chọn ảnh đại diện mới"
+                android:textColor="@color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,32 +69,31 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:text="Email: "
+                    android:text="Email:"
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvEmailProUpdate"
-                    android:layout_width="300dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:textColor="@color/black"
+                    android:background="@color/white"
                     android:textSize="18dp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="20dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="147dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="20dp"
-                    android:layout_weight="1"
-                    android:text="Tên tài khoản: "
+                    android:text="Tên:"
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     android:textStyle="bold" />
@@ -92,12 +102,8 @@
                     android:id="@+id/etFullnameProUpdate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:background="@color/white"
-                    android:text="TextView"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
             <LinearLayout
@@ -107,21 +113,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="SĐT: "
+                    android:text="SĐT:"
                     android:textColor="@color/black"
                     android:textSize="18dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    />
 
                 <EditText
                     android:id="@+id/etPhoneProUpdate"
-                    android:layout_width="300dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
                     android:background="@color/white"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
 
             <Button

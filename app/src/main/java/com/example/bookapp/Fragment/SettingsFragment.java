@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,8 @@ public class SettingsFragment extends Fragment {
     private TextView tvname, tvEmail;
     private ImageView avatar;
 
+    private LinearLayout profileSettings;
+
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -92,6 +95,7 @@ public class SettingsFragment extends Fragment {
         View rootView=  inflater.inflate(R.layout.fragment_settings, container, false);
         TextView tvseem = (TextView) rootView.findViewById(R.id.tvNameSetting);
         Button btnlogout = (Button) rootView.findViewById(R.id.btnLogout);
+
         tvseem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,6 +119,13 @@ public class SettingsFragment extends Fragment {
         tvname.setText(SharedPrefManager.getInstance(getActivity()).getUser().getFull_name());
         tvEmail.setText(SharedPrefManager.getInstance(getActivity()).getUser().getEmail());
         Glide.with(this).load(SharedPrefManager.getInstance(getActivity()).getUser().getAvatar()).into(avatar);
+
+        profileSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), ProfileActivity.class));
+            }
+        });
     }
     public void goToAttractProfile()
     {

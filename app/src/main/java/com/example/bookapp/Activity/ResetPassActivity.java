@@ -73,7 +73,7 @@ public class ResetPassActivity extends AppCompatActivity {
                             //if no error in response
                             if (obj.getInt("err") == 0) {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                                startActivity( new Intent(ResetPassActivity.this, ProfileActivity.class));
+                                startActivity( new Intent(ResetPassActivity.this, LoginActivity.class));
                             } else {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
                             }

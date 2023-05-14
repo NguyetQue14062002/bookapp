@@ -21,6 +21,14 @@ public class Post {
         this.numComments = numComments;
     }
 
+    public Post(int id, int status_id, String tcontent, String image, String user) {
+        this.id = id;
+        this.status_id = status_id;
+        this.tcontent = tcontent;
+        this.image = image;
+        this.user = user;
+    }
+
     public Post() {
     }
 

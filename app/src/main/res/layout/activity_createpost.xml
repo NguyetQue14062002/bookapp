@@ -65,8 +65,8 @@
                 android:layout_height="70dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/avata" />
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/defautavt" />
 
             <LinearLayout
                 android:layout_width="100dp"
@@ -105,6 +105,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:hint="Bạn đang nghĩ gì ?"
+            android:minHeight="48dp"
             app:counterMaxLength="1000" />
 
     </LinearLayout>

@@ -21,26 +21,27 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:layout_width="450dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:weightSum="5"
                 android:background="@drawable/profile_background"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/profileSettings">
 
                 <ImageView
                     android:id="@+id/imageUserSetting"
-                    android:layout_width="100dp"
-                    android:layout_height="80dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:scaleType="fitXY"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/defautavt" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_weight="2"
+                    android:layout_weight="4"
                     android:orientation="vertical">
 
                     <TextView
@@ -77,12 +78,11 @@
                 <TextView
                     android:id="@+id/tvHome"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="3"
                     android:text="Trang chủ"
                     android:textColor="@color/black"
+                    android:gravity="center_vertical"
                     android:textSize="22sp"
                     android:textStyle="normal" />
             </LinearLayout>
@@ -104,12 +104,11 @@
                     android:id="@+id/tvAbout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="3"
                     android:text="Trợ giúp "
                     android:textColor="@color/black"
                     android:textSize="22sp"
+                    android:gravity="center_vertical"
                     android:textStyle="normal" />
 
             </LinearLayout>
@@ -118,11 +117,10 @@
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
-                android:text="Tất cả bài viết"
+                android:layout_margin="30dp"
+                android:text="Bài viết của tôi"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="22sp" />
 
             <android.widget.Button
                 android:id="@+id/btnLogout"

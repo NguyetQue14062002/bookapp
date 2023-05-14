@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etmail, etpass;
     private TextView tvRegister,  tvFogetPassword;
     private Button btnLogin;
+    private CheckBox MemoryPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         tvRegister = findViewById(R.id.tvRegister);
         tvFogetPassword= findViewById(R.id.tvFogortPass);
+        MemoryPass= findViewById(R.id.checkBox);
+
+
 
         TextView txt = findViewById(R.id.editTextNewAcc2);
         txt.setPaintFlags(txt.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -111,8 +116,9 @@ public class LoginActivity extends AppCompatActivity {
                                 //getting the user from the response
                                 JSONObject userJson = obj.getJSONObject("user_data");
                                 String avatar = userJson.getString("avatar");
-                                if (avatar == "null")
+                                if (avatar == "null") {
                                     avatar = null;
+                                }
 
                                 //creating a new user object
                                 User user = new User(
@@ -138,8 +144,14 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                                 SharedPrefManager.getInstance(getApplicationContext()).setHistory(history);
                                 Log.d("History", String.valueOf(history.size()));
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
+                                //if it is user
+                                if (user.getRole_id() == 3) {
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                } else if (user.getRole_id() == 1) {
+                                    //if it is admin
+                                    startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+                                }
                             } else {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
                             }

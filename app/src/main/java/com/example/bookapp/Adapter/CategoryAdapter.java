@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookapp.Domain.Category;
+import com.example.bookapp.Interface.OnCategoryClickListener;
 import com.example.bookapp.R;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>{
     private Context context;
     private ArrayList<Category> categories;
+    private OnCategoryClickListener listener;
 
     public void setCategories(ArrayList<Category> categories) {
         this.categories = categories;
@@ -34,10 +36,22 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return new CategoryAdapter.CategoryViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         Category category = categories.get(position);
         holder.categoryName.setText(category.getName());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(listener != null) {
+                    listener.onCategoryClick(category);
+                }
+
+
+            }
+        });
     }
 
     @Override

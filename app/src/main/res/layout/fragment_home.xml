@@ -16,35 +16,29 @@
             android:layout_height="60dp"
             android:layout_marginTop="16dp"
             android:orientation="horizontal"
+            android:weightSum="5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_menu_24" />
 
             <TextView
                 android:id="@+id/tvHello"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="4"
+                android:layout_marginHorizontal="20dp"
                 android:text="Chào, Tommy"
+                android:layout_weight="5"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/imageUserHome"
-                android:layout_width="26dp"
-                android:layout_height="53dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/avata" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginHorizontal="10dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/defautavt" />
         </LinearLayout>
 
         <LinearLayout
@@ -93,14 +87,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imageView13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/image_21" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

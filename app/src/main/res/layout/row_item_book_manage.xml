@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imgBook"
+            android:id="@+id/imgBookAdmin"
             android:layout_width="240dp"
             android:layout_height="361dp"
             android:layout_gravity="center"
@@ -24,7 +24,7 @@
             app:srcCompat="@drawable/book1" />
 
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tvTitleAdmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -35,7 +35,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvAuthor"
+            android:id="@+id/tvAuthorAdmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -48,19 +48,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10sp"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:layout_marginBottom="20dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tvUpdate"
+                android:id="@+id/tvUpdateBook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -70,12 +62,12 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvDelete"
+                android:id="@+id/tvDeleteBook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
-                android:text="Xóa bài viết"
+                android:text="Xóa Sách"
                 android:textAlignment="textEnd"
                 android:textColor="#F10606"
                 android:textStyle="bold" />

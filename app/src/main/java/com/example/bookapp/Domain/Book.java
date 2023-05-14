@@ -3,13 +3,34 @@ package com.example.bookapp.Domain;
 import java.io.Serializable;
 
 public class Book implements Serializable {
-    private int id, category_id, status_id, publisher_id;
+    private int id, category_id, status_id, publisher_id, page_number;
     private String author, description, image_url, link, title;
 
     public Book(String author, String image_url, String title) {
         this.author = author;
         this.image_url = image_url;
         this.title = title;
+    }
+
+    public Book(int id, int category_id, int status_id, int publisher_id, int page_number, String author, String description, String image_url, String link, String title) {
+        this.id = id;
+        this.category_id = category_id;
+        this.status_id = status_id;
+        this.publisher_id = publisher_id;
+        this.page_number = page_number;
+        this.author = author;
+        this.description = description;
+        this.image_url = image_url;
+        this.link = link;
+        this.title = title;
+    }
+
+    public int getPage_number() {
+        return page_number;
+    }
+
+    public void setPage_number(int page_number) {
+        this.page_number = page_number;
     }
 
     public Book(int id, int category_id, int status_id, String author, String description, String image_url, String link, String title) {
@@ -105,5 +126,21 @@ public class Book implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", category_id=" + category_id +
+                ", status_id=" + status_id +
+                ", publisher_id=" + publisher_id +
+                ", page_number=" + page_number +
+                ", author='" + author + '\'' +
+                ", description='" + description + '\'' +
+                ", image_url='" + image_url + '\'' +
+                ", link='" + link + '\'' +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

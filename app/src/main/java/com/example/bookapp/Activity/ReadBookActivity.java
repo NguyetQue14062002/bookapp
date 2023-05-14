@@ -52,7 +52,7 @@ public class ReadBookActivity extends AppCompatActivity {
         imgexit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ReadBookActivity.this, BookDetailActivity.class));
+                finish();
             }
         });
         Intent intent = getIntent();

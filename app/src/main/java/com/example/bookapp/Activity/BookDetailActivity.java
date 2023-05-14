@@ -34,7 +34,7 @@ import java.util.Map;
 public class BookDetailActivity extends AppCompatActivity {
     private ImageView addToListBtn, backBtn, imgBook;
 
-    private TextView bookName, author, description;
+    private TextView bookName, author, description, pageNumber;
     private Button read;
     private Book book;
 
@@ -60,6 +60,7 @@ public class BookDetailActivity extends AppCompatActivity {
         bookName = findViewById(R.id.tvBookName);
         author = findViewById(R.id.tvAuthor);
         description = findViewById(R.id.tvIntro);
+        pageNumber = findViewById(R.id.tvpageNumber);
 
         read= findViewById(R.id.btnRead);
         read.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +155,7 @@ public class BookDetailActivity extends AppCompatActivity {
         bookName.setText(book.getTitle());
         author.setText(book.getAuthor());
         description.setText(book.getDescription());
-
+        pageNumber.setText(String.valueOf(book.getPage_number()));
     }
 
     private void updateHistory(int status_id) {

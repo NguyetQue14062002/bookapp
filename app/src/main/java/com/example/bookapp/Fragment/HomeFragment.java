@@ -40,6 +40,7 @@ import com.example.bookapp.Domain.Category;
 import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.Helper.VolleySingle;
+import com.example.bookapp.Interface.OnCategoryClickListener;
 import com.example.bookapp.R;
 
 import org.json.JSONArray;
@@ -60,7 +61,7 @@ import okhttp3.OkHttpClient;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment  {
+public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,6 +75,7 @@ public class HomeFragment extends Fragment  {
 
     private ArrayList<Book> books;
     private ArrayList<Book> bookSearch;
+    private ArrayList<Book> bookSearchCate;
     private ArrayList<Category> categories;
 
     private BookAdapter bookAdapter;
@@ -164,12 +166,10 @@ public class HomeFragment extends Fragment  {
 
         tvHi = view.findViewById(R.id.tvHello);
         etSearch = view.findViewById(R.id.tvSearch);
-        image= view.findViewById(R.id.imageUserHome);
+        image = view.findViewById(R.id.imageUserHome);
 
         getData();
-        if (SharedPrefManager.getInstance(getActivity()).getUser().getAvatar() == null)
-            image.setImageResource(R.drawable.defautavt);
-        else
+        if (SharedPrefManager.getInstance(getActivity()).getUser().getAvatar() != null)
             Glide.with(this).load(SharedPrefManager.getInstance(getActivity()).getUser().getAvatar()).into(image);
         imgSearch= view.findViewById(R.id.imgSearchBook);
         imgSearch.setOnClickListener(new View.OnClickListener() {
@@ -233,6 +233,18 @@ public class HomeFragment extends Fragment  {
                     public void onResponse(String response) {
 
                         try {
+                            /*
+this.id = id;
+        this.category_id = category_id;
+        this.status_id = status_id;
+        this.publisher_id = publisher_id;
+        this.page_number = page_number;
+        this.author = author;
+        this.description = description;
+        this.image_url = image_url;
+        this.link = link;
+        this.title = title;
+ */
 
                             //converting response to json object
                             JSONObject obj = new JSONObject(response);
@@ -246,6 +258,8 @@ public class HomeFragment extends Fragment  {
                                             object.getInt("category_id"),
                                             object.getInt("status_id"),
                                             -1,
+
+                                            object.getInt("page_number"),
                                             object.getString("author"),
                                             object.getString("description"),
                                             object.getString("image_url"),
@@ -339,6 +353,7 @@ public class HomeFragment extends Fragment  {
                                             object.getInt("category_id"),
                                             object.getInt("status_id"),
                                             -1,
+                                            object.getInt("page_number"),
                                             object.getString("author"),
                                             object.getString("description"),
                                             object.getString("image_url"),
@@ -350,6 +365,74 @@ public class HomeFragment extends Fragment  {
                                 bookAdapter.setBooks(bookSearch);
                                 bookAdapter.notifyDataSetChanged();
                                 Log.d("booksearch", String.valueOf(bookSearch.size()));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequest);
+    }
+
+    @Override
+    public void onCategoryClick(Category hymnModel) {
+        bookSearchCate = new ArrayList<>();
+        bookAdapter = new BookAdapter(getContext(), bookSearchCate);
+        bookAdapter = new BookAdapter(getContext(), books);
+        booksRecyclerView.setAdapter(bookAdapter);
+        String key= etSearch.getText().toString();
+        int idCate= hymnModel.getId();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/book/?category_id="+idCate+"&search_key="+key,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            //converting response to json object
+                            JSONObject obj = new JSONObject(response);
+                            if (obj.getInt("err") == 0) {
+                                JSONObject data = obj.getJSONObject("data");
+                                JSONArray allBooks = data.getJSONArray("rows");
+                                for (int i = 0; i < allBooks.length(); i++) {
+                                    JSONObject object = allBooks.getJSONObject(i);
+/*
+this.id = id;
+        this.category_id = category_id;
+        this.status_id = status_id;
+        this.publisher_id = publisher_id;
+        this.page_number = page_number;
+        this.author = author;
+        this.description = description;
+        this.image_url = image_url;
+        this.link = link;
+        this.title = title;
+ */
+                                    Book book = new Book(
+                                            object.getInt("id"),
+                                            object.getInt("category_id"),
+                                            object.getInt("status_id"),
+                                            -1,
+                                            object.getInt("page_number"),
+                                            object.getString("author"),
+                                            object.getString("description"),
+                                            object.getString("image_url"),
+                                            object.getString("link"),
+                                            object.getString("title")
+                                    );
+                                    bookSearchCate.add(book);
+                                }
+                                bookAdapter.setBooks( bookSearchCate);
+                                bookAdapter.notifyDataSetChanged();
+                                Log.d(" bookSearchCate", String.valueOf( bookSearchCate.size()));
                             }
 
                         } catch (JSONException e) {
