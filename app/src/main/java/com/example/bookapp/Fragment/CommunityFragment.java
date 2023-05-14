@@ -165,7 +165,6 @@ public class CommunityFragment extends Fragment {
         );
     }
 
-
     public Observable<List<Post>> getPosts(User user) {
         return Observable.create(emitter -> {
             List<Post> listPosts = new ArrayList<>();

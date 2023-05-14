@@ -69,7 +69,6 @@ public class PostDetailActivity extends AppCompatActivity {
             getComments(postId);
 
             tvName = findViewById(R.id.tvName);
-            tvDate = findViewById(R.id.tvDate);
             tvContent = findViewById(R.id.tvContent);
             tvNumLike = findViewById(R.id.tvNumLike);
             tvNumCmt = findViewById(R.id.tvNumCmt);
@@ -103,9 +102,14 @@ public class PostDetailActivity extends AppCompatActivity {
             User user = SharedPrefManager.getInstance(this).getUser();
             String accessToken = user.getAccess_token();
 
+            String avt = getIntent().getStringExtra("avatar");
 
             Glide.with(this).load(getIntent().getStringExtra("post_image")).into(imgPost);
-            Glide.with(this).load(getIntent().getStringExtra("post_avatar")).into(imgAvatar);
+            if (avt == null) {
+                Glide.with(this).load(R.drawable.defautavt).into(imgAvatar);
+            } else {
+                Glide.with(this).load(avt).into(imgAvatar);
+            }
             imgExit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
