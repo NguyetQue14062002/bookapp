@@ -25,7 +25,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:weightSum="7"
                 android:orientation="horizontal">
@@ -39,15 +39,14 @@
 
                 <ImageView
                     android:id="@+id/imgAvatar"
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:adjustViewBounds="false"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/avata" />
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/defaultavt" />
 
                 <LinearLayout
-                    android:layout_width="200dp"
+                    android:layout_width="290dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_weight="3"
@@ -61,13 +60,6 @@
                         android:textColor="@color/black"
                         android:textSize="20dp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="10h" />
                 </LinearLayout>
 
                 <ImageView
@@ -96,7 +88,9 @@
                 <ImageView
                     android:id="@+id/postImage"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="200dp"
+                    android:scaleType="fitCenter"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     app:srcCompat="@drawable/book1" />
@@ -167,14 +161,6 @@
                     android:layout_marginStart="5dp"
                     android:layout_weight="1"
                     android:text="Bình luận" />
-
-                <TextView
-                    android:id="@+id/tvNumShare"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="7"
-                    android:textAlignment="textEnd" />
 
                 <!--                <TextView-->
                 <!--                    android:layout_width="wrap_content"-->

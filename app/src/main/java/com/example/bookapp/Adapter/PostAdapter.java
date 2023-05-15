@@ -19,7 +19,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Domain.Post;
-import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
 
@@ -66,7 +65,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             Glide.with(context).load(post.getAvatar()).into(holder.userImage);
         }
         else {
-            Glide.with(context).load(R.drawable.defautavt).into(holder.userImage);
+            Glide.with(context).load(R.drawable.defaultavt).into(holder.userImage);
         }
         holder.name.setText(post.getUser());
         holder.tcontent.setText(post.getTcontent());
@@ -163,7 +162,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             name = itemView.findViewById(R.id.tvName);
             tcontent = itemView.findViewById(R.id.tvContent);
             numLikes = itemView.findViewById(R.id.tvNumLike);
-            numShares = itemView.findViewById(R.id.tvNumShare);
             numComments = itemView.findViewById(R.id.tvNumCmt);
             imgLike = itemView.findViewById(R.id.imgLike);
         }

@@ -31,16 +31,6 @@
                 android:textSize="15dp"
                 tools:ignore="TextSizeCheck" />
 
-            <TextView
-                android:id="@+id/tvDateCmt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:text="30/4"
-                android:textAlignment="viewEnd"
-                android:textSize="15dp"
-                tools:ignore="TextSizeCheck" />
         </LinearLayout>
 
         <TextView

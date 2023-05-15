@@ -84,7 +84,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Lưu mật khẩu"
+                android:checked="false"
+                android:text="Hiện mật khẩu"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

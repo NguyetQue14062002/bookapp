@@ -110,7 +110,7 @@ public class BookManagementAdapter extends RecyclerView.Adapter<BookManagementAd
     }
 
     private void deleteBook(int book_id) {
-        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, "http://10.0.2.2:5000/api/book/?ids[0]="+book_id,
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, "http://10.0.2.2:5000/api/book/?ids[0]="+ String.valueOf(book_id),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

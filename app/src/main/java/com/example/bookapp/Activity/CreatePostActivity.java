@@ -1,8 +1,5 @@
 package com.example.bookapp.Activity;
 
-import static android.content.ContentValues.TAG;
-
-import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
@@ -32,23 +29,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.example.bookapp.Adapter.PostAdapter;
 import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.Helper.VolleyMultipartRequest;
-import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
-import com.example.bookapp.Helper.VolleyMultipartRequest.DataPart;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
 
 public class CreatePostActivity extends AppCompatActivity {
     private TextView userName, uploadImage;
@@ -94,8 +86,9 @@ public class CreatePostActivity extends AppCompatActivity {
                         Toast.makeText(CreatePostActivity.this, "Vui lòng điền nội dung để đăng bài!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    uploadBitmap(bitmap);
-                    bitmap = null;
+                    createBitmapPost(bitmap, access_token);
+                    createContentPost(access_token);
+                    createBitmap(bitmap, access_token);
                 }
             });
 
@@ -216,7 +209,11 @@ public class CreatePostActivity extends AppCompatActivity {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public void uploadBitmap(final Bitmap bitmap) {
+    public void createBitmapPost(final Bitmap bitmap, String access_token) {
+
+        if (bitmap == null) {
+            return;
+        }
 
         String contentPost = tcontent.getText().toString();
         if (TextUtils.isEmpty(contentPost)) {
@@ -232,8 +229,6 @@ public class CreatePostActivity extends AppCompatActivity {
                             JSONObject obj = new JSONObject(new String(response.data));
                             Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                             finish();
-                            Intent intent = new Intent("com.example.bookapp.RELOAD_DATA");
-                            sendBroadcast(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -246,7 +241,6 @@ public class CreatePostActivity extends AppCompatActivity {
                         Log.e("GotError", "" + error.getMessage());
                     }
                 }) {
-
 
             @Override
             protected Map<String, DataPart> getByteData() {
@@ -268,6 +262,100 @@ public class CreatePostActivity extends AppCompatActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("tcontent", contentPost);
                 return params;
+            }
+
+        };
+
+        //adding the request to volley
+        Volley.newRequestQueue(this).add(volleyMultipartRequest);
+    }
+
+    public void createContentPost(String access_token) {
+        String contentPost = tcontent.getText().toString();
+        if (TextUtils.isEmpty(contentPost)) {
+            Toast.makeText(this, "Hôm nay bạn nghĩ gì?", Toast.LENGTH_SHORT).show();
+            tcontent.requestFocus();
+            return;
+        }
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:5000/api/post/",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Lỗi tạo bài viết", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(CreatePostActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("GotError", "" + error.getMessage());
+                        finish();
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String,String>();
+                headers.put("Authorization", access_token);
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("tcontent", contentPost);
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+    public void createBitmap(final Bitmap bitmap, String access_token) {
+
+        if (bitmap == null) {
+            return;
+        }
+        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://10.0.2.2:5000/api/post/",
+                new Response.Listener<NetworkResponse>() {
+                    @Override
+                    public void onResponse(NetworkResponse response) {
+                        try {
+                            JSONObject obj = new JSONObject(new String(response.data));
+                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("GotError", "" + error.getMessage());
+                    }
+                }) {
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                long imagename = System.currentTimeMillis();
+                params.put("image", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", access_token);
+                return headers;
             }
 
         };

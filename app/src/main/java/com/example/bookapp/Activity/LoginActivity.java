@@ -7,10 +7,13 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,7 +62,19 @@ public class LoginActivity extends AppCompatActivity {
         tvFogetPassword= findViewById(R.id.tvFogortPass);
         MemoryPass= findViewById(R.id.checkBox);
 
+        MemoryPass= findViewById(R.id.checkBox);
+        MemoryPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(!b){
 
+                    etpass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                } else {
+                    etpass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }
+            }
+        });
 
         TextView txt = findViewById(R.id.editTextNewAcc2);
         txt.setPaintFlags(txt.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

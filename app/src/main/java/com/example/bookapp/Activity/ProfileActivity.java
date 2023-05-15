@@ -61,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         access_token = user.getAccess_token();
             if (user.getAvatar() == null)
-                avatarPro.setImageResource(R.drawable.defautavt);
+                avatarPro.setImageResource(R.drawable.defaultavt);
             else
                 Glide.with(this).load(user.getAvatar()).into( avatarPro);
             exit.setOnClickListener(new View.OnClickListener() {

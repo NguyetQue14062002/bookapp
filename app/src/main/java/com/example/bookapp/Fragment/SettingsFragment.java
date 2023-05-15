@@ -117,7 +117,10 @@ public class SettingsFragment extends Fragment {
         tvEmail= view.findViewById(R.id.tvEmailSetting);
         tvname.setText(SharedPrefManager.getInstance(getActivity()).getUser().getFull_name());
         tvEmail.setText(SharedPrefManager.getInstance(getActivity()).getUser().getEmail());
-        Glide.with(this).load(SharedPrefManager.getInstance(getActivity()).getUser().getAvatar()).into(avatar);
+        Glide.with(this).load(R.drawable.defaultavt).into(avatar);
+        if (SharedPrefManager.getInstance(getActivity()).getUser().getAvatar() != null) {
+            Glide.with(this).load(SharedPrefManager.getInstance(getActivity()).getUser().getAvatar()).into(avatar);
+        }
 
     }
     public void goToAttractProfile()

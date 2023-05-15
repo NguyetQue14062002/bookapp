@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -261,11 +260,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
 
     void updateProfile(String access_token){
-        String  url = "http://10.0.2.2:5000/api/user/profile";
-        String fullnameEdit = dtFullname.getText().toString();
-        String phoneEdit= dtPhone.getText().toString();
-        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
-                new Response.Listener<String>()
+       String  url = "http://10.0.2.2:5000/api/user/profile";
+       String fullnameEdit = dtFullname.getText().toString();
+       String phoneEdit= dtPhone.getText().toString();
+       StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
+               new Response.Listener<String>()
                 {
                     @Override
                     public void onResponse(String response) {

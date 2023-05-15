@@ -1,7 +1,6 @@
 package com.example.bookapp.Activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,13 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Adapter.CommentAdapter;
 import com.example.bookapp.Domain.Comment;
@@ -69,7 +65,6 @@ public class PostDetailActivity extends AppCompatActivity {
             getComments(postId);
 
             tvName = findViewById(R.id.tvName);
-            tvDate = findViewById(R.id.tvDate);
             tvContent = findViewById(R.id.tvContent);
             tvNumLike = findViewById(R.id.tvNumLike);
             tvNumCmt = findViewById(R.id.tvNumCmt);
@@ -103,9 +98,15 @@ public class PostDetailActivity extends AppCompatActivity {
             User user = SharedPrefManager.getInstance(this).getUser();
             String accessToken = user.getAccess_token();
 
-
-            Glide.with(this).load(getIntent().getStringExtra("post_image")).into(imgPost);
-            Glide.with(this).load(getIntent().getStringExtra("post_avatar")).into(imgAvatar);
+            String avt = getIntent().getStringExtra("avatar");
+            String postImage = getIntent().getStringExtra("post_image");
+            if (postImage != "null"){
+                Glide.with(this).load(getIntent().getStringExtra("post_image")).into(imgPost);
+            }
+            Glide.with(this).load(R.drawable.defaultavt).into(imgAvatar);
+            if (avt != "null") {
+                Glide.with(this).load(avt).into(imgAvatar);
+            }
             imgExit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -180,7 +181,7 @@ public class PostDetailActivity extends AppCompatActivity {
                             Log.d("ERROR getListComment: ", "onResponse: " + e.getMessage());
                         }
                     }
-                }, new Response.ErrorListener() {
+                }, new ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("ERROR getListComment: ", "onResponse: " + error.getMessage());
@@ -218,7 +219,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         }
                     }
                 },
-                new Response.ErrorListener() {
+                new ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("ERROR like: ", "onResponse: " + error.getMessage());
@@ -268,7 +269,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         }
                     }
                 },
-                new Response.ErrorListener() {
+                new ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("ERROR update like: ", "onResponse: " + error.getMessage());
@@ -318,7 +319,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     Log.d("ERROR comment: ", "onResponse: " + e.getMessage());
                 }
             }
-        }, new Response.ErrorListener() {
+        }, new ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("ERROR comment: ", "onResponse: " + error.getMessage());
