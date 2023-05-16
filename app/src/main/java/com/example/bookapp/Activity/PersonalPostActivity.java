@@ -1,28 +1,20 @@
-package com.example.bookapp.Fragment;
+package com.example.bookapp.Activity;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
-import com.example.bookapp.Activity.CreatePostActivity;
-import com.example.bookapp.Activity.PostDetailActivity;
+import com.example.bookapp.Adapter.PersonalPostAdapter;
 import com.example.bookapp.Adapter.PostAdapter;
 import com.example.bookapp.Domain.Post;
 import com.example.bookapp.Domain.User;
@@ -42,36 +34,33 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-/**
- * A simple {@link Fragment} subclass.ctory method to
- * create an instance of this fragment.
- */
-public class CommunityFragment extends Fragment {
-    private PostAdapter postAdapter;
+public class PersonalPostActivity extends AppCompatActivity {
 
-    private ImageView ivNewPost;
     private RecyclerView rvPosts;
-
+    private TextView tvAllPost, tvActivePost, tvHiddenPost;
+    private PersonalPostAdapter postAdapter;
     ActivityResultLauncher<Intent> activityResultLauncher;
 
-
-    public CommunityFragment() {
-        // Required empty public constructor
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_community, container, false);
-        if (SharedPrefManager.getInstance(getActivity()).isLoggedIn()) {
-            User user = SharedPrefManager.getInstance(getActivity()).getUser();
-            rvPosts = v.findViewById(R.id.rvPosts);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_personalpost);
+
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            User user = SharedPrefManager.getInstance(this).getUser();
+            rvPosts = findViewById(R.id.rvPosts);
+            tvAllPost = findViewById(R.id.tvAllPost);
+            tvActivePost = findViewById(R.id.tvActivePost);
+            tvHiddenPost = findViewById(R.id.tvHiddenPost);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             rvPosts.setLayoutManager(layoutManager);
-            postAdapter = new PostAdapter(getActivity(), user.getAccess_token());
+            postAdapter = new PersonalPostAdapter(this, user.getAccess_token());
             rvPosts.setAdapter(postAdapter);
-            getPosts(user)
+            tvAllPost.setTextColor(Color.BLUE);
+            String urlAllPost = "http://10.0.2.2:5000/api/post?order[]=id&order[]=DESC&status_id=6&status_id=7&user_id=";
+            String urlActivePost = "http://10.0.2.2:5000/api/post?order[]=id&order[]=DESC&status_id=6&user_id=";
+            String urlHiddenPost = "http://10.0.2.2:5000/api/post?order[]=id&order[]=DESC&status_id=7&user_id=";
+            getPersonalPosts(user, urlAllPost)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<List<Post>>() {
@@ -93,50 +82,110 @@ public class CommunityFragment extends Fragment {
                             // Hoàn thành
                         }
                     });
+
+            tvAllPost.setOnClickListener(v -> {
+                tvAllPost.setTextColor(Color.BLUE);
+                tvActivePost.setTextColor(Color.BLACK);
+                tvHiddenPost.setTextColor(Color.BLACK);
+                getPersonalPosts(user, urlAllPost)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<List<Post>>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                // Khởi tạo
+                            }
+                            @Override
+                            public void onNext(List<Post> posts) {
+                                // Xử lý dữ liệu và cập nhật Adapter
+                                postAdapter.setPosts(posts);
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                // Xử lý lỗi
+                            }
+                            @Override
+                            public void onComplete() {
+                                // Hoàn thành
+                            }
+                        });
+            });
+
+            tvActivePost.setOnClickListener(v -> {
+                tvActivePost.setTextColor(Color.BLUE);
+                tvAllPost.setTextColor(Color.BLACK);
+                tvHiddenPost.setTextColor(Color.BLACK);
+                getPersonalPosts(user, urlActivePost)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<List<Post>>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                // Khởi tạo
+                            }
+                            @Override
+                            public void onNext(List<Post> posts) {
+                                // Xử lý dữ liệu và cập nhật Adapter
+                                postAdapter.setPosts(posts);
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                // Xử lý lỗi
+                            }
+                            @Override
+                            public void onComplete() {
+                                // Hoàn thành
+                            }
+                        });
+            });
+
+            tvHiddenPost.setOnClickListener(v -> {
+                tvHiddenPost.setTextColor(Color.BLUE);
+                tvActivePost.setTextColor(Color.BLACK);
+                tvAllPost.setTextColor(Color.BLACK);
+                getPersonalPosts(user, urlHiddenPost)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<List<Post>>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                // Khởi tạo
+                            }
+                            @Override
+                            public void onNext(List<Post> posts) {
+                                // Xử lý dữ liệu và cập nhật Adapter
+                                postAdapter.setPosts(posts);
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                // Xử lý lỗi
+                            }
+                            @Override
+                            public void onComplete() {
+                                // Hoàn thành
+                            }
+                        });
+            });
+
+            postAdapter.setOnItemClickListener(new PersonalPostAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Post post, int position) {
+                    // Xử lý sự kiện click vào post
+                    Intent intent = new Intent(PersonalPostActivity.this, PostDetailActivity.class);
+                    intent.putExtra("post_id", post.getId());
+                    intent.putExtra("post_user", post.getUser());
+                    intent.putExtra("post_tcontent", post.getTcontent());
+                    intent.putExtra("post_image", post.getImage());
+                    intent.putExtra("post_status_id", post.getStatus_id());
+                    intent.putExtra("post_num_likes", post.getNumLikes());
+                    intent.putExtra("post_num_comments", post.getNumComments());
+                    intent.putExtra("is_liked", post.getLiked());
+                    intent.putExtra("position", position);
+                    intent.putExtra("avatar", post.getAvatar());
+                    activityResultLauncher.launch(intent);
+                }
+            });
         }
-        return v;
-    }
-
-    /*
-     * Override Ham onViewCreated va bat dau code nhu onCreate trong Activity
-     */
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ivNewPost = view.findViewById(R.id.ivNewPost);
-        rvPosts = view.findViewById(R.id.rvPosts);
-        ivNewPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CreatePostActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        postAdapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Post post, int position) {
-                // Xử lý sự kiện click vào post
-                Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-                intent.putExtra("post_id", post.getId());
-                intent.putExtra("post_user", post.getUser());
-                intent.putExtra("post_tcontent", post.getTcontent());
-                intent.putExtra("post_image", post.getImage());
-                intent.putExtra("post_status_id", post.getStatus_id());
-                intent.putExtra("post_num_likes", post.getNumLikes());
-                intent.putExtra("post_num_comments", post.getNumComments());
-                intent.putExtra("is_liked", post.getLiked());
-                intent.putExtra("position", position);
-                intent.putExtra("avatar", post.getAvatar());
-                activityResultLauncher.launch(intent);
-            }
-        });
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -159,13 +208,14 @@ public class CommunityFragment extends Fragment {
                     }
                 }
         );
+
     }
 
-    public Observable<List<Post>> getPosts(User user) {
+    public Observable<List<Post>> getPersonalPosts(User user, String url) {
         return Observable.create(emitter -> {
             List<Post> listPosts = new ArrayList<>();
 
-            StringRequest stringRequestPost = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/post?order[]=id&order[]=DESC",
+            StringRequest stringRequestPost = new StringRequest(Request.Method.GET, url + String.valueOf(user.getId()),
                     response -> {
                         try {
                             JSONObject obj = new JSONObject(response);
@@ -206,7 +256,7 @@ public class CommunityFragment extends Fragment {
                                                     likeEmitter.onError(error);
                                                 });
 
-                                        VolleySingle.getInstance(getActivity()).addToRequestQueue(stringRequestLike);
+                                        VolleySingle.getInstance(this).addToRequestQueue(stringRequestLike);
                                     });
 
                                     Observable<Post> statusLikeObservable = Observable.create(statusLikeEmitter -> {
@@ -236,7 +286,7 @@ public class CommunityFragment extends Fragment {
                                                 error -> {
                                                     statusLikeEmitter.onError(error);
                                                 });
-                                        VolleySingle.getInstance(getActivity()).addToRequestQueue(stringRequestLikeUser);
+                                        VolleySingle.getInstance(this).addToRequestQueue(stringRequestLikeUser);
                                     });
 
                                     Observable<Post> commentObservable = Observable.create(commentEmitter -> {
@@ -258,7 +308,7 @@ public class CommunityFragment extends Fragment {
                                                 error -> {
                                                     commentEmitter.onError(error);
                                                 });
-                                        VolleySingle.getInstance(getActivity()).addToRequestQueue(stringRequestComment);
+                                        VolleySingle.getInstance(this).addToRequestQueue(stringRequestComment);
                                     });
 
                                     observables.add(likeObservable);
@@ -285,7 +335,7 @@ public class CommunityFragment extends Fragment {
                         emitter.onError(error);
                     });
 
-            VolleySingle.getInstance(getActivity()).addToRequestQueue(stringRequestPost);
+            VolleySingle.getInstance(this).addToRequestQueue(stringRequestPost);
         });
     }
 }

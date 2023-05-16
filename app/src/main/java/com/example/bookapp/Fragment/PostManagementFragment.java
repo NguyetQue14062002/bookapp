@@ -35,11 +35,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PostManagementFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PostManagementFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -62,32 +57,6 @@ public class PostManagementFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PostManagementFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PostManagementFragment newInstance(String param1, String param2) {
-        PostManagementFragment fragment = new PostManagementFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,7 +91,7 @@ public class PostManagementFragment extends Fragment {
     }
 
     private void getAllPosts(View view) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/post/",
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/post?order[]=id&order[]=DESC&status_id=6&status_id=7",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

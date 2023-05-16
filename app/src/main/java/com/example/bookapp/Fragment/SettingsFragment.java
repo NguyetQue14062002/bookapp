@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Activity.LoginActivity;
+import com.example.bookapp.Activity.PersonalPostActivity;
 import com.example.bookapp.Activity.ProfileActivity;
 import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.Helper.VolleySingle;
@@ -37,11 +38,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SettingsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -52,7 +48,7 @@ public class SettingsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView tvname, tvEmail;
+    private TextView tvname, tvEmail, tvPersonalPost;
     private ImageView avatar;
 
 
@@ -60,32 +56,6 @@ public class SettingsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SettingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SettingsFragment newInstance(String param1, String param2) {
-        SettingsFragment fragment = new SettingsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,12 +85,22 @@ public class SettingsFragment extends Fragment {
         tvname = view.findViewById(R.id.tvNameSetting);
         avatar = view.findViewById(R.id.imageUserSetting);
         tvEmail= view.findViewById(R.id.tvEmailSetting);
+        tvPersonalPost = view.findViewById(R.id.tvPersonalPost);
         tvname.setText(SharedPrefManager.getInstance(getActivity()).getUser().getFull_name());
         tvEmail.setText(SharedPrefManager.getInstance(getActivity()).getUser().getEmail());
+        tvPersonalPost = view.findViewById(R.id.tvPersonalPost);
         Glide.with(this).load(R.drawable.defaultavt).into(avatar);
         if (SharedPrefManager.getInstance(getActivity()).getUser().getAvatar() != null) {
             Glide.with(this).load(SharedPrefManager.getInstance(getActivity()).getUser().getAvatar()).into(avatar);
         }
+
+        tvPersonalPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), PersonalPostActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
     public void goToAttractProfile()

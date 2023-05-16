@@ -24,14 +24,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.Helper.VolleyMultipartRequest;
+import com.example.bookapp.Helper.VolleyMultipartRequest.DataPart;
 import com.example.bookapp.R;
 
 import org.json.JSONException;
@@ -48,6 +49,9 @@ public class CreatePostActivity extends AppCompatActivity {
     private Button btnPost;
     private EditText tcontent;
     private String access_token, filePath;
+
+    private boolean isClickedPost = false;
+    private RequestQueue requestQueue;
     private Bitmap bitmap;
     private final int GALLERY_REQ_CODE = 1000;
 
@@ -86,9 +90,11 @@ public class CreatePostActivity extends AppCompatActivity {
                         Toast.makeText(CreatePostActivity.this, "Vui lòng điền nội dung để đăng bài!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    createBitmapPost(bitmap, access_token);
-                    createContentPost(access_token);
-                    createBitmap(bitmap, access_token);
+                    if (isClickedPost) {
+                        return;
+                    }
+                    isClickedPost = true;
+                    uploadBitmap(bitmap);
                 }
             });
 
@@ -106,20 +112,22 @@ public class CreatePostActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        Uri picUri = data.getData();
-        filePath = getPath(picUri);
-        if (filePath != null) {
-            try {
-                Log.d("filePath", String.valueOf(filePath));
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picUri);
-                imagePost.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (resultCode == RESULT_OK) {
+            Uri picUri = data.getData();
+            filePath = getPath(picUri);
+            if (filePath != null) {
+                try {
+                    Log.d("filePath", String.valueOf(filePath));
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picUri);
+                    imagePost.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(
+                        CreatePostActivity.this, "no image selected",
+                        Toast.LENGTH_LONG).show();
             }
-        } else {
-            Toast.makeText(
-                    CreatePostActivity.this, "no image selected",
-                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -209,11 +217,7 @@ public class CreatePostActivity extends AppCompatActivity {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public void createBitmapPost(final Bitmap bitmap, String access_token) {
-
-        if (bitmap == null) {
-            return;
-        }
+    public void uploadBitmap(final Bitmap bitmap) {
 
         String contentPost = tcontent.getText().toString();
         if (TextUtils.isEmpty(contentPost)) {
@@ -225,9 +229,11 @@ public class CreatePostActivity extends AppCompatActivity {
                 new Response.Listener<NetworkResponse>() {
                     @Override
                     public void onResponse(NetworkResponse response) {
+                        isClickedPost = false;
                         try {
                             JSONObject obj = new JSONObject(new String(response.data));
                             Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            Log.d("response", String.valueOf("OKKKKK"));
                             finish();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -237,111 +243,13 @@ public class CreatePostActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        isClickedPost = false;
                         Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                        Log.e("GotError", "" + error.getMessage());
-                    }
-                }) {
-
-            @Override
-            protected Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
-                long imagename = System.currentTimeMillis();
-                params.put("image", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", access_token);
-                return headers;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("tcontent", contentPost);
-                return params;
-            }
-
-        };
-
-        //adding the request to volley
-        Volley.newRequestQueue(this).add(volleyMultipartRequest);
-    }
-
-    public void createContentPost(String access_token) {
-        String contentPost = tcontent.getText().toString();
-        if (TextUtils.isEmpty(contentPost)) {
-            Toast.makeText(this, "Hôm nay bạn nghĩ gì?", Toast.LENGTH_SHORT).show();
-            tcontent.requestFocus();
-            return;
-        }
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:5000/api/post/",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                            finish();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Lỗi tạo bài viết", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CreatePostActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.e("GotError", "" + error.getMessage());
                         finish();
                     }
                 }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String,String>();
-                headers.put("Authorization", access_token);
-                return headers;
-            }
 
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("tcontent", contentPost);
-                return params;
-            }
-        };
-        Volley.newRequestQueue(this).add(stringRequest);
-    }
-
-    public void createBitmap(final Bitmap bitmap, String access_token) {
-
-        if (bitmap == null) {
-            return;
-        }
-        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://10.0.2.2:5000/api/post/",
-                new Response.Listener<NetworkResponse>() {
-                    @Override
-                    public void onResponse(NetworkResponse response) {
-                        try {
-                            JSONObject obj = new JSONObject(new String(response.data));
-                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                            finish();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                        Log.e("GotError", "" + error.getMessage());
-                    }
-                }) {
 
             @Override
             protected Map<String, DataPart> getByteData() {
@@ -358,9 +266,110 @@ public class CreatePostActivity extends AppCompatActivity {
                 return headers;
             }
 
-        };
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("tcontent", tcontent.getText().toString());
+                return params;
+            }
 
+        };
+        Log.d("response", volleyMultipartRequest.toString());
         //adding the request to volley
         Volley.newRequestQueue(this).add(volleyMultipartRequest);
     }
 }
+
+//   public void createContentPost(String access_token) {
+//        String contentPost = tcontent.getText().toString();
+//        if (TextUtils.isEmpty(contentPost)) {
+//            Toast.makeText(this, "Hôm nay bạn nghĩ gì?", Toast.LENGTH_SHORT).show();
+//            tcontent.requestFocus();
+//            return;
+//        }
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:5000/api/post/",
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        try {
+//                            JSONObject obj = new JSONObject(response);
+//                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+//                            finish();
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                            Toast.makeText(getApplicationContext(), "Lỗi tạo bài viết", Toast.LENGTH_SHORT).show();
+//                            finish();
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Toast.makeText(CreatePostActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+//                        Log.e("GotError", "" + error.getMessage());
+//                        finish();
+//                    }
+//                }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<String,String>();
+//                headers.put("Authorization", access_token);
+//                return headers;
+//            }
+//
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                HashMap<String, String> params = new HashMap<>();
+//                params.put("tcontent", contentPost);
+//                return params;
+//            }
+//        };
+//        Volley.newRequestQueue(this).add(stringRequest);
+//    }
+//
+//    public void createBitmap(final Bitmap bitmap, String access_token) {
+//
+//        if (bitmap == null) {
+//            return;
+//        }
+//        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://10.0.2.2:5000/api/post/",
+//                new Response.Listener<NetworkResponse>() {
+//                    @Override
+//                    public void onResponse(NetworkResponse response) {
+//                        try {
+//                            JSONObject obj = new JSONObject(new String(response.data));
+//                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+//                            finish();
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+//                        Log.e("GotError", "" + error.getMessage());
+//                    }
+//                }) {
+//
+//            @Override
+//            protected Map<String, DataPart> getByteData() {
+//                Map<String, DataPart> params = new HashMap<>();
+//                long imagename = System.currentTimeMillis();
+//                params.put("image", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
+//                return params;
+//            }
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", access_token);
+//                return headers;
+//            }
+//
+//        };
+//
+//        //adding the request to volley
+//        Volley.newRequestQueue(this).add(volleyMultipartRequest);
+//    }

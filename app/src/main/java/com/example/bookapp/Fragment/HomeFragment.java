@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
         categories = new ArrayList<>();
         categoryRecyclerView = view.findViewById(R.id.rcCategory);
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        categoryAdapter = new CategoryAdapter(getContext(), categories);
+        categoryAdapter = new CategoryAdapter(getContext(), categories,this::onCategoryClick );
         categoryRecyclerView.setAdapter(categoryAdapter);
 
         getCategories(view);
@@ -383,7 +383,7 @@ this.id = id;
     }
 
     @Override
-    public void onCategoryClick(Category hymnModel) {
+    public void onCategoryClick( Category hymnModel) {
         bookSearchCate = new ArrayList<>();
         bookAdapter = new BookAdapter(getContext(), bookSearchCate);
         bookAdapter = new BookAdapter(getContext(), books);
@@ -404,18 +404,6 @@ this.id = id;
                                 JSONArray allBooks = data.getJSONArray("rows");
                                 for (int i = 0; i < allBooks.length(); i++) {
                                     JSONObject object = allBooks.getJSONObject(i);
-/*
-this.id = id;
-        this.category_id = category_id;
-        this.status_id = status_id;
-        this.publisher_id = publisher_id;
-        this.page_number = page_number;
-        this.author = author;
-        this.description = description;
-        this.image_url = image_url;
-        this.link = link;
-        this.title = title;
- */
                                     Book book = new Book(
                                             object.getInt("id"),
                                             object.getInt("category_id"),
@@ -449,4 +437,6 @@ this.id = id;
         );
         VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
+
+
 }

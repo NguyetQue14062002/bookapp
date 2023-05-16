@@ -109,20 +109,24 @@ public class BookManagementAdapter extends RecyclerView.Adapter<BookManagementAd
         }
     }
 
-    private void deleteBook(int book_id) {
-        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, "http://10.0.2.2:5000/api/book/?ids[0]="+ String.valueOf(book_id),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            //converting response to json object
-                            JSONObject obj = new JSONObject(response);
-                            //if no error in response
-                            if (obj.getInt("err") == 0) {
-                                Toast.makeText(context, obj.getString("message"), Toast.LENGTH_SHORT).show();
+    private void deleteBook(int id) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id);
+            jsonObject.put("status_id", 2);
+        } catch(Exception e) {
 
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest (Request.Method.PUT, "http://10.0.2.2:5000/api/book/status", jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getInt("err") == 0) {
+                                Toast.makeText(context, response.getString("message"), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(context, obj.getString("message"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, response.getString("message"), Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -135,9 +139,10 @@ public class BookManagementAdapter extends RecyclerView.Adapter<BookManagementAd
                         if (error.getMessage() != null) {
                             Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
+
                     }
                 }
-        ){
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -146,7 +151,7 @@ public class BookManagementAdapter extends RecyclerView.Adapter<BookManagementAd
             }
 
         };
-        VolleySingle.getInstance(context).addToRequestQueue(stringRequest);
+        VolleySingle.getInstance(context).addToRequestQueue(request);
     }
 
 

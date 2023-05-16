@@ -1,5 +1,6 @@
 package com.example.bookapp.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +25,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         this.categories = categories;
     }
 
-    public CategoryAdapter(Context context, ArrayList<Category> categories) {
+    public CategoryAdapter(Context context, ArrayList<Category> categories, OnCategoryClickListener listener) {
         this.context = context;
         this.categories = categories;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,18 +40,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoryViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Category category = categories.get(position);
         holder.categoryName.setText(category.getName());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.categoryName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if(listener != null) {
-                    listener.onCategoryClick(category);
+                    listener.onCategoryClick( category);
                 }
-
-
             }
         });
     }
@@ -65,6 +65,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryName = itemView.findViewById(R.id.tvCategoryName);
+
         }
     }
 }

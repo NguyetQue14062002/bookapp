@@ -16,6 +16,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Domain.Book;
@@ -84,25 +85,28 @@ public class PostManagementAdapter extends RecyclerView.Adapter<PostManagementAd
             postImage = itemView.findViewById(R.id.postImage);
             userName = itemView.findViewById(R.id.userName);
             content = itemView.findViewById(R.id.contentPost);
-            updateBtn = itemView.findViewById(R.id.tvUpdatePost);
             deleteBtn = itemView.findViewById(R.id.tvDeletePost);
         }
     }
 
-    private void deletePost(int post_id) {
-        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, "http://10.0.2.2:5000/api/post/?ids[0]="+post_id,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            //converting response to json object
-                            JSONObject obj = new JSONObject(response);
-                            //if no error in response
-                            if (obj.getInt("err") == 0) {
-                                Toast.makeText(context, obj.getString("message"), Toast.LENGTH_SHORT).show();
+    private void deletePost(int id) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id);
+            jsonObject.put("status_id", 8);
+        } catch(Exception e) {
 
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest (Request.Method.PUT, "http://10.0.2.2:5000/api/post/status", jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getInt("err") == 0) {
+                                Toast.makeText(context, response.getString("message"), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(context, obj.getString("message"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, response.getString("message"), Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -115,9 +119,10 @@ public class PostManagementAdapter extends RecyclerView.Adapter<PostManagementAd
                         if (error.getMessage() != null) {
                             Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
+
                     }
                 }
-        ){
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -126,7 +131,7 @@ public class PostManagementAdapter extends RecyclerView.Adapter<PostManagementAd
             }
 
         };
-        VolleySingle.getInstance(context).addToRequestQueue(stringRequest);
+        VolleySingle.getInstance(context).addToRequestQueue(request);
     }
 
 }

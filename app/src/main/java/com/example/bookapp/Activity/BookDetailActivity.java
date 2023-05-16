@@ -69,6 +69,7 @@ public class BookDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
                 intent.putExtra("link", book.getLink());
                 intent.putExtra("title", book.getTitle());
+                createHistory(4);
                 startActivity(intent);
             }
         });
