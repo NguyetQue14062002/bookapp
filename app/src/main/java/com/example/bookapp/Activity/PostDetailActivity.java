@@ -201,6 +201,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                 Toast.makeText(PostDetailActivity.this, "Like success", Toast.LENGTH_SHORT).show();
                                 imgLike.setImageResource(R.drawable.ic_like);
                                 numLike++;
+                                tvNumLike.setText(String.valueOf(numLike));
                                 isLiked = true;
                             } else {
                                 Integer statusId = obj.getInt("status_id");

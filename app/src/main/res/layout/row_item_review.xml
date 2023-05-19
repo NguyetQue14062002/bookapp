@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <RatingBar
-            android:id="@+id/ratingBar2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/tvReviewer"
@@ -25,8 +21,23 @@
             android:gravity="center|start"
             android:text="Reviewer"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
+
+        <RatingBar
+            android:id="@+id/ratingBarReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:transformPivotX="50dp"
+            android:transformPivotY="30dp"
+            android:layout_gravity="center"
+            android:numStars="5"
+            android:rating="4"
+            android:stepSize="1"/>
+
+
     </LinearLayout>
 
     <TextView
@@ -34,8 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Content Review"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout6"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:layout_marginHorizontal="10dp"/>
+</LinearLayout>

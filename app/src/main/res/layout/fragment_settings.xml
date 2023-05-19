@@ -30,7 +30,7 @@
                     android:id="@+id/imageUserSetting"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:layout_marginHorizontal="5dp"
+                    android:layout_margin="5dp"
                     android:scaleType="centerCrop"
                     tools:srcCompat="@drawable/defaultavt" />
 
