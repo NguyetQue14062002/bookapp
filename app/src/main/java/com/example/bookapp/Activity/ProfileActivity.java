@@ -86,8 +86,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
         private void getData() {
-
-
             // String Request initialized
             StringRequest stringRequest = new StringRequest(Request.Method.GET, " http://10.0.2.2:5000/api/user", new Response.Listener<String>() {
                 @Override

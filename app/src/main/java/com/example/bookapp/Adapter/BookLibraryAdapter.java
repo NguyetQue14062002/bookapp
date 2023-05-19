@@ -1,10 +1,12 @@
 package com.example.bookapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Activity.BookDetailActivity;
+import com.example.bookapp.Activity.ReadBookActivity;
 import com.example.bookapp.Domain.Book;
 import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.SharedPrefManager;
@@ -59,7 +62,7 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
     @Override
     public void onBindViewHolder(@NonNull BookLibraryViewHolder holder, int position) {
         Book book = books.get(position);
-
+        
         holder.tvBookName.setText(book.getTitle());
         holder.tvAuthor.setText(book.getAuthor());
         Glide.with(context).load(book.getImage_url()).into(holder.imgBook);
@@ -71,7 +74,16 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
                 deleteHistory(book);
             }
         });
-
+        //TODO: reading
+       holder.imgBook.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent intent = new Intent(context, ReadBookActivity.class);
+               intent.putExtra("link", book.getLink());
+               intent.putExtra("title", book.getTitle());
+               context.startActivity(intent);
+           }
+       });
         //TODO: updateHistory
         holder.updateBtn.setOnClickListener(new View.OnClickListener() {
             int status_id;

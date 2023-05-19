@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -15,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.example.bookapp.Adapter.PersonalPostAdapter;
-import com.example.bookapp.Adapter.PostAdapter;
 import com.example.bookapp.Domain.Post;
 import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.SharedPrefManager;
@@ -38,6 +38,7 @@ public class PersonalPostActivity extends AppCompatActivity {
 
     private RecyclerView rvPosts;
     private TextView tvAllPost, tvActivePost, tvHiddenPost;
+    private ImageView ivBack, ivNewPost;
     private PersonalPostAdapter postAdapter;
     ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -48,6 +49,8 @@ public class PersonalPostActivity extends AppCompatActivity {
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             User user = SharedPrefManager.getInstance(this).getUser();
+            ivNewPost = findViewById(R.id.ivNewPost);
+            ivBack = findViewById(R.id.ivBack);
             rvPosts = findViewById(R.id.rvPosts);
             tvAllPost = findViewById(R.id.tvAllPost);
             tvActivePost = findViewById(R.id.tvActivePost);
@@ -82,6 +85,15 @@ public class PersonalPostActivity extends AppCompatActivity {
                             // Hoàn thành
                         }
                     });
+
+            ivBack.setOnClickListener(v -> {
+                finish();
+            });
+
+            ivNewPost.setOnClickListener(v -> {
+                Intent intent = new Intent(PersonalPostActivity.this, CreatePostActivity.class);
+                activityResultLauncher.launch(intent);
+            });
 
             tvAllPost.setOnClickListener(v -> {
                 tvAllPost.setTextColor(Color.BLUE);

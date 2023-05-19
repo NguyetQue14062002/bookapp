@@ -37,10 +37,6 @@ public class DoneFragment extends Fragment {
     private RecyclerView booksRecyclerView;
 
     public DoneFragment() {} //Constructor
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }       //onCreate
 
     public static DoneFragment newInstance() {       //Create new instance
         DoneFragment fragment = new DoneFragment();
