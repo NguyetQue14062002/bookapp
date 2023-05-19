@@ -4,9 +4,17 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private  int id, role_id;
-    private String email, full_name, avatar, token, phone_number, password;
+    private String email;
+    private String full_name;
+    private String avatar;
+    private String token;
+    private String phone_number;
+    private String password;
 
-    public User(int id, int role_id, String email, String full_name, String avatar, String token, String phone_number, String password) {
+    private String access_token;
+    private String refresh_token;
+
+    public User(int id, int role_id, String email, String full_name, String avatar, String token, String phone_number, String access_token, String refresh_token) {
         this.id = id;
         this.role_id = role_id;
         this.email = email;
@@ -14,7 +22,23 @@ public class User implements Serializable {
         this.avatar = avatar;
         this.token = token;
         this.phone_number = phone_number;
-        this.password = password;
+        this.access_token = access_token;
+        this.refresh_token =refresh_token;
+
+    }
+
+    public User(String full_name) {
+        this.full_name = full_name;
+    }
+
+    public User(int id, int role_id, String email, String full_name, String avatar, String token, String phone_number) {
+        this.id = id;
+        this.role_id = role_id;
+        this.email = email;
+        this.full_name = full_name;
+        this.avatar = avatar;
+        this.phone_number = phone_number;
+        this.token = token;
     }
 
     public int getId() {
@@ -79,5 +103,21 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAccess_token() {
+        return access_token;
+    }
+
+    public void setAccess_token(String access_token) {
+        this.access_token = access_token;
+    }
+
+    public String getRefresh_token() {
+        return refresh_token;
+    }
+
+    public void setRefresh_token(String refresh_token) {
+        this.refresh_token = refresh_token;
     }
 }

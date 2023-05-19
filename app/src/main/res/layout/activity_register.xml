@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:textAlignment="center">
+    tools:context=".Activity.RegisterActivity">
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="430dp"
+        android:layout_height="712dp"
         android:layout_marginTop="120dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,7 +56,7 @@
                 android:textStyle="normal" />
 
             <EditText
-                android:id="@+id/tvEmail"
+                android:id="@+id/tvEmailRegister"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginStart="40dp"
@@ -76,28 +77,41 @@
                 android:layout_marginEnd="40dp"
                 android:background="@drawable/textbox_background"
                 android:gravity="center|start"
-                android:hint="Nhập mật khẩu"
+                android:hint="Nhập số điện thoại"
                 android:textSize="20sp"
                 android:textStyle="normal"
-                app:passwordToggleEnabled="true"/>
+                app:passwordToggleEnabled="true" />
 
             <EditText
-                android:id="@+id/tvPass"
+                android:id="@+id/tvPassRegister"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
+                android:ems="10"
+                android:inputType="textPassword"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="40dp"
                 android:background="@drawable/textbox_background"
                 android:gravity="center|start"
-                android:inputType="textVisiblePassword|text"
+                android:hint="Nhập mật khẩu"
+                android:textSize="20sp"/>
+            <EditText
+                android:id="@+id/tvPassConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/textbox_background"
+                android:gravity="center|start"
                 android:hint="Nhập lại mật khẩu"
-                android:textSize="20sp"
-                android:textStyle="normal"
-                app:passwordToggleEnabled="true" />
+                android:textSize="20sp"/>
+
 
             <android.widget.Button
-                android:id="@+id/btnLogin"
+                android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
@@ -112,7 +126,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <EditText
+                <TextView
                     android:id="@+id/editTextNewAcc"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
@@ -120,10 +134,13 @@
                     android:layout_marginTop="40dp"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:text="Bạn đã có tài khoản? " />
+                    android:minHeight="48dp"
+                    android:text="Bạn đã có tài khoản? "
+                    android:textColor="@color/black"
+                    android:textSize="19sp"/>
 
                 <TextView
-                    android:id="@+id/tvRegister"
+                    android:id="@+id/tvUILogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -139,4 +156,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,55 +5,45 @@ package com.example.bookapp.Adapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.bookapp.Fragment.DoneFragment;
 import com.example.bookapp.Fragment.ReadingFragment;
 import com.example.bookapp.Fragment.UnreadFragment;
 
-public class ViewLibraryAdapter extends FragmentStatePagerAdapter {
-    public ViewLibraryAdapter(@NonNull FragmentManager fm, int behavior) {
-        super(fm, behavior);
+import java.util.ArrayList;
+
+public class ViewLibraryAdapter extends FragmentStateAdapter{
+
+
+    public ViewLibraryAdapter(@NonNull FragmentActivity fragmentActivity) {
+        super(fragmentActivity);
     }
 
     @NonNull
     @Override
-    public Fragment getItem(int position) {
-        switch (position){
+    public Fragment createFragment(int position) {
+        switch (position) {
             case 0:
-                return  new ReadingFragment();
+                return new ReadingFragment();
+
             case 1:
-                return  new UnreadFragment();
+                return new UnreadFragment();
+
             case 2:
-                return  new DoneFragment();
+                return new DoneFragment();
+
             default:
-
-                return  new ReadingFragment();
-
+                return new ReadingFragment();
         }
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return 3;
-    }
-
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        String title = "";
-        switch (position){
-            case 0:
-                title = "Đang đọc";
-                break;
-            case 1:
-                title = "Chưa đọc";
-                break;
-            case 2:
-                title = "Đã xong";
-                break;
-        }
-        return title;
     }
 }

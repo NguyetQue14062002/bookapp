@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:id="@+id/userImage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginHorizontal="10dp"
                 android:adjustViewBounds="false"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/avata" />
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/defaultavt" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -42,21 +39,14 @@
                     android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="10h" />
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView19"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_more_vert_24" />
+            <!--            <ImageView-->
+            <!--                android:id="@+id/ivMoreOption"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_weight="1"-->
+            <!--                app:srcCompat="@drawable/baseline_more_vert_24" />-->
         </LinearLayout>
 
         <LinearLayout
@@ -70,23 +60,24 @@
                 android:id="@+id/tvContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="sfhfbksvkajvalsjncams,c jefnjefn,samc ,alwifqlwifnlaksf. vkalefqlekfamflksnfjsdkfnwiewlfqqkelgmwlkfjpqwopqfhewfnsd.vlsmvskvmslvkmslkvmslvsdkvslvknslkvnsvlsndvs"
-                android:textAlignment="center" />
+                android:layout_margin="15dp"
+                android:textSize="17dp"
+                android:text="vd" />
 
             <ImageView
-                android:id="@+id/imageView21"
+                android:id="@+id/postImage"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:scaleType="fitCenter"
+                android:layout_height="wrap_content"
+                android:maxHeight="200dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:srcCompat="@drawable/book1" />
+                android:layout_marginEnd="10dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -103,33 +94,28 @@
                 android:layout_weight="1"
                 app:srcCompat="@drawable/baseline_insert_comment_24" />
 
-            <ImageView
-                android:id="@+id/imgShare"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_share_24" />
+            <!--            <ImageView-->
+            <!--                android:id="@+id/imgShare"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_weight="1"-->
+            <!--                app:srcCompat="@drawable/baseline_share_24" />-->
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:weightSum="2"
+            android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/intNumLike"
+                android:id="@+id/tvNumLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="127"
-                android:textAlignment="textEnd" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_weight="2"
-                android:text="Yêu thích" />
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/tvNumCmt"
@@ -137,31 +123,22 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="17"
-                android:textAlignment="textEnd" />
+                android:textAlignment="center" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_weight="2"
-                android:text="Bình luận" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvNumShare"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:text="7"-->
+            <!--                android:textAlignment="textEnd" />-->
 
-            <TextView
-                android:id="@+id/tvNumShare"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="7"
-                android:textAlignment="textEnd" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_weight="2"
-                android:text="Chia sẻ" />
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="5dp"-->
+            <!--                android:layout_weight="2"-->
+            <!--                android:text="Chia sẻ" />-->
         </LinearLayout>
-
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
