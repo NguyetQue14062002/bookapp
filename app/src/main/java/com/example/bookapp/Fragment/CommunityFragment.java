@@ -119,6 +119,7 @@ public class CommunityFragment extends Fragment {
                 intent.putExtra("post_user", post.getUser());
                 intent.putExtra("post_tcontent", post.getTcontent());
                 intent.putExtra("post_image", post.getImage());
+                intent.putExtra("book_id", post.getBookId());
                 intent.putExtra("post_status_id", post.getStatus_id());
                 intent.putExtra("post_num_likes", post.getNumLikes());
                 intent.putExtra("post_num_comments", post.getNumComments());
@@ -182,6 +183,7 @@ public class CommunityFragment extends Fragment {
                                     post.setTcontent(postJson.getString("tcontent"));
                                     post.setImage(postJson.getString("image"));
                                     post.setStatus_id(postJson.getInt("status_id"));
+                                    post.setBookId(postJson.getInt("book_id"));
 
                                     Observable<Post> likeObservable = Observable.create(likeEmitter -> {
                                         StringRequest stringRequestLike = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/like?status_id=6&post_id=" + String.valueOf(post.getId()),

@@ -6,6 +6,9 @@ public class Book implements Serializable {
     private int id, category_id, status_id, publisher_id, page_number;
     private String author, description, image_url, link, title;
 
+    public Book() {
+    }
+
     public Book(String author, String image_url, String title) {
         this.author = author;
         this.image_url = image_url;
@@ -127,6 +130,7 @@ public class Book implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
 
     @Override
     public String toString() {

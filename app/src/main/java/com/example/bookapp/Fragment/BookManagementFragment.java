@@ -122,8 +122,6 @@ public class BookManagementFragment extends Fragment {
                 bookAdapter.notifyDataSetChanged();
             }
         });
-
-
     }
 
     private void getAllBooks(String url) {
@@ -132,9 +130,7 @@ public class BookManagementFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         try {
-
                             //converting response to json object
                             JSONObject obj = new JSONObject(response);
                             if (obj.getInt("err") == 0) {
@@ -153,16 +149,16 @@ public class BookManagementFragment extends Fragment {
                                         object.put("publisher_id", -1);
                                     }
                                     Book book = new Book(
-                                            object.getInt("id"),
-                                            object.getInt("category_id"),
-                                            object.getInt("status_id"),
-                                            object.getInt("publisher_id"),
-                                            object.getInt("page_number"),
-                                            object.getString("author"),
-                                            object.getString("description"),
-                                            object.getString("image_url"),
-                                            object.getString("link"),
-                                            object.getString("title")
+                                        object.getInt("id"),
+                                        object.getInt("category_id"),
+                                        object.getInt("status_id"),
+                                        object.getInt("publisher_id"),
+                                        object.getInt("page_number"),
+                                        object.getString("author"),
+                                        object.getString("description"),
+                                        object.getString("image_url"),
+                                        object.getString("link"),
+                                        object.getString("title")
                                     );
                                     books.add(book);
                                 }

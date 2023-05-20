@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Adapter.CommentAdapter;
+import com.example.bookapp.Domain.Book;
 import com.example.bookapp.Domain.Comment;
 import com.example.bookapp.Domain.Post;
 import com.example.bookapp.Domain.User;
@@ -39,7 +41,7 @@ import java.util.Map;
 public class PostDetailActivity extends AppCompatActivity {
 
     private TextView tvName, tvDate, tvContent, tvNumLike, tvNumCmt;
-    private ImageView imgAvatar, imgLike, imgComment, imgExit, imgSend, imgIconCmt, imgPost;
+    private ImageView imgAvatar, imgLike, imgComment, imgExit, imgSend, imgIconCmt, imgPost, ivMore;
     private EditText etComment;
     private RecyclerView rcCmt;
     private CommentAdapter commentAdapter;
@@ -47,6 +49,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private Integer numCmt = 0;
     private Integer numLike = 0;
     private Integer position = -1;
+    private Integer bookId = 0;
+    private Book myBook;
     private List<Comment> comments = new ArrayList<>();
     private Boolean isLiked = false;
     private int postId;
@@ -55,12 +59,13 @@ public class PostDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_postdetail);
-        if(SharedPrefManager.getInstance(this).isLoggedIn()){
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             postId = getIntent().getIntExtra("post_id", 0);
             numLike = getIntent().getIntExtra("post_num_likes", 0);
             numCmt = getIntent().getIntExtra("post_num_comments", 0);
             position = getIntent().getIntExtra("position", -1);
             isLiked = getIntent().getBooleanExtra("is_liked", false);
+            bookId = getIntent().getIntExtra("book_id", 0);
 
             getComments(postId);
 
@@ -73,6 +78,7 @@ public class PostDetailActivity extends AppCompatActivity {
             imgLike = findViewById(R.id.imgLike);
             imgComment = findViewById(R.id.imgComment);
             imgExit = findViewById(R.id.imgExit);
+            ivMore = findViewById(R.id.ivMore);
             imgSend = findViewById(R.id.imgSend);
             imgIconCmt = findViewById(R.id.imgIconCmt);
             etComment = findViewById(R.id.etComment);
@@ -93,14 +99,14 @@ public class PostDetailActivity extends AppCompatActivity {
             commentAdapter = new CommentAdapter(comments);
             rcCmt.setAdapter(commentAdapter);
 
-
+            getBook();
 
             User user = SharedPrefManager.getInstance(this).getUser();
             String accessToken = user.getAccess_token();
 
             String avt = getIntent().getStringExtra("avatar");
             String postImage = getIntent().getStringExtra("post_image");
-            if (postImage != "null"){
+            if (postImage != "null") {
                 Glide.with(this).load(getIntent().getStringExtra("post_image")).into(imgPost);
             }
             Glide.with(this).load(R.drawable.defaultavt).into(imgAvatar);
@@ -118,6 +124,26 @@ public class PostDetailActivity extends AppCompatActivity {
                     intent.putExtra("is_liked", isLiked);
                     setResult(RESULT_OK, intent);
                     finish();
+                }
+            });
+
+            if (bookId == 0) {
+                ivMore.setEnabled(false);
+            }
+            ivMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popupMenu = new PopupMenu(PostDetailActivity.this, ivMore);
+                    popupMenu.getMenuInflater().inflate(R.menu.share_book, popupMenu.getMenu());
+                    popupMenu.setOnMenuItemClickListener(item -> {
+                        if (item.getItemId() == R.id.detailBook) {
+                            Intent intent = new Intent(PostDetailActivity.this, BookDetailActivity.class);
+                            intent.putExtra("myBook", myBook);
+                            startActivity(intent);
+                        }
+                        return true;
+                    });
+                    popupMenu.show();
                 }
             });
 
@@ -208,8 +234,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                 if (statusId == 6) {
                                     updateLike(postId, token, 8);
                                     isLiked = false;
-                                }
-                                else if (statusId == 8) {
+                                } else if (statusId == 8) {
                                     updateLike(postId, token, 6);
                                     isLiked = true;
                                 }
@@ -234,6 +259,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
                 return params;
             }
+
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
@@ -347,6 +373,57 @@ public class PostDetailActivity extends AppCompatActivity {
                 return headers;
             }
         };
+        VolleySingle.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+    public void getBook() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/book?id=" + bookId,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            if (obj.getInt("err") == 0) {
+                                JSONObject data = obj.getJSONObject("data");
+                                JSONArray allBooks = data.getJSONArray("rows");
+                                JSONObject object = allBooks.getJSONObject(0);
+                                try {
+                                    object.getInt("category_id");
+                                } catch (JSONException e) {
+                                    object.put("category_id", -1);
+                                }
+                                try {
+                                    object.getInt("publisher_id");
+                                } catch (JSONException e) {
+                                    object.put("publisher_id", -1);
+                                }
+                                Book book = new Book(
+                                        object.getInt("id"),
+                                        object.getInt("category_id"),
+                                        object.getInt("status_id"),
+                                        object.getInt("publisher_id"),
+                                        object.getInt("page_number"),
+                                        object.getString("author"),
+                                        object.getString("description"),
+                                        object.getString("image_url"),
+                                        object.getString("link"),
+                                        object.getString("title")
+                                );
+                                myBook = book;
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("ERROR get book: ", "onResponse: " + error.getMessage());
+                    }
+                }
+        );
         VolleySingle.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

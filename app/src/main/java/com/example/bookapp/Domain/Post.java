@@ -6,7 +6,7 @@ public class Post {
     private int id, status_id;
     private String tcontent, image, user, avatar;
     private Date createAt;
-    private Integer numLikes, numShares, numComments;
+    private Integer numLikes, numShares, numComments, bookId;
 
     private Boolean isLiked;
     public Post(int id, String user, int status_id, String tcontent, String image, Date createAt, Integer numLikes, Integer numShares, Integer numComments) {
@@ -30,6 +30,14 @@ public class Post {
     }
 
     public Post() {
+    }
+
+    public Integer getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
     }
 
     public Boolean getLiked() {

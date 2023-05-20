@@ -54,6 +54,8 @@
         <activity
             android:name=".Activity.ReadBookActivity"
             android:exported="false" />
+        <activity android:name=".Activity.ShareBookActivity"
+            android:exported="false"/>
         <activity
             android:name=".Activity.BookDetailActivity"
             android:exported="false" />

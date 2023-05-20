@@ -2,11 +2,13 @@ package com.example.bookapp.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +20,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.example.bookapp.Activity.BookDetailActivity;
+import com.example.bookapp.Activity.PostDetailActivity;
+import com.example.bookapp.Domain.Book;
 import com.example.bookapp.Domain.Post;
 import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -90,12 +96,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         } else if (isLiked == false) {
             holder.imgLike.setImageResource(R.drawable.ic_unlike);
         }
-//        Integer numShares = post.getNumShares();
-//        if (numShares != null) {
-//            holder.numShares.setText(numShares.toString());
-//        } else {
-//            holder.numShares.setText("0");
-//        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,5 +257,4 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         };
         VolleySingle.getInstance(context).addToRequestQueue(stringRequest);
     }
-
 }

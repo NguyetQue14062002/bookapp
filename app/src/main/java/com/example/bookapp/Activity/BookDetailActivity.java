@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BookDetailActivity extends AppCompatActivity {
-    private ImageView addToListBtn, backBtn, imgBook;
+    private ImageView addToListBtn, backBtn, imgBook, ivShare;
 
     private TextView bookName, author, description, pageNumber, numPeopleRead;
     private Button read;
@@ -50,20 +50,18 @@ public class BookDetailActivity extends AppCompatActivity {
 
         initData();
         ReadBookNum();
-
     }
-
     private void initData() {
         book = (Book) getIntent().getSerializableExtra("myBook");
         addToListBtn = findViewById(R.id.addToListBtn);
         backBtn = findViewById(R.id.backBtn);
-
         imgBook = findViewById(R.id.imgBook);
         bookName = findViewById(R.id.tvBookName);
         author = findViewById(R.id.tvAuthor);
         description = findViewById(R.id.tvIntro);
         pageNumber = findViewById(R.id.tvpageNumber);
         numPeopleRead = findViewById(R.id.tvNumRead);
+        ivShare = findViewById(R.id.ivShare);
         read= findViewById(R.id.btnRead);
         read.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,15 +77,12 @@ public class BookDetailActivity extends AppCompatActivity {
         // Add eventListener for buttons
         addToListBtn.setOnClickListener(new View.OnClickListener() {
             int status_id;
-
             @Override
             public void onClick(View view) {
                 //Creating the instance of PopupMenu
                 PopupMenu popup = new PopupMenu(BookDetailActivity.this, addToListBtn);
                 popup.getMenuInflater()
                         .inflate(R.menu.book_list, popup.getMenu());
-
-
                 popup.show(); //showing popup menu
 
                 //TH1: Neu sach da co trong history roi
@@ -100,17 +95,13 @@ public class BookDetailActivity extends AppCompatActivity {
                                 case R.id.reading:
                                     status_id = 4;
                                     break;
-
                                 case R.id.done:
                                     status_id = 5;
                                     break;
-
                                 case R.id.unread:
                                     status_id = 3;
                                     break;
-
                             }
-
                             updateHistory(status_id);
                             return true;
                         }
@@ -123,17 +114,13 @@ public class BookDetailActivity extends AppCompatActivity {
                                 case R.id.reading:
                                     status_id = 4;
                                     break;
-
                                 case R.id.done:
                                     status_id = 5;
                                     break;
-
                                 case R.id.unread:
                                     status_id = 3;
                                     break;
-
                             }
-
                             createHistory(status_id);
                             return true;
                         }
@@ -142,10 +129,21 @@ public class BookDetailActivity extends AppCompatActivity {
             }
         });
 
+        ivShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BookDetailActivity.this, ShareBookActivity.class);
+                intent.putExtra("book_id", book.getId());
+                intent.putExtra("book_title", book.getTitle());
+                intent.putExtra("book_image", book.getImage_url());
+                startActivity(intent);
+            }
+        });
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(BookDetailActivity.this, MainActivity.class));
+                finish();
             }
         });
 
@@ -192,19 +190,13 @@ public class BookDetailActivity extends AppCompatActivity {
         } catch(Exception e) {
 
         }
-
         JsonObjectRequest request = new JsonObjectRequest (Request.Method.PUT, "http://10.0.2.2:5000/api/history/", jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            //converting response to json object
-                            //if no error in response
                             if (response.getInt("err") == 0) {
                                 Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
-                                //getting the user from the response
-
-
                             } else {
                                 Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_LONG).show();
                             }
@@ -219,7 +211,6 @@ public class BookDetailActivity extends AppCompatActivity {
                         if (error.getMessage() != null) {
                             Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 }
         ) {
@@ -229,7 +220,6 @@ public class BookDetailActivity extends AppCompatActivity {
                 params.put("Authorization", currentUser.getAccess_token());
                 return params;
             }
-
         };
         VolleySingle.getInstance(this).addToRequestQueue(request);
     }
@@ -248,13 +238,8 @@ public class BookDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            //converting response to json object
-                            //if no error in response
                             if (response.getInt("err") == 0) {
                                 Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
-                                //getting the user from the response
-
-
                             } else {
                                 Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_LONG).show();
                             }
@@ -269,7 +254,6 @@ public class BookDetailActivity extends AppCompatActivity {
                         if (error.getMessage() != null) {
                             Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 }
         ) {
@@ -279,7 +263,6 @@ public class BookDetailActivity extends AppCompatActivity {
                 params.put("Authorization", currentUser.getAccess_token());
                 return params;
             }
-
         };
         VolleySingle.getInstance(this).addToRequestQueue(request);
     }
