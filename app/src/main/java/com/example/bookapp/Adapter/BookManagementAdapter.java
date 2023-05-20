@@ -28,6 +28,7 @@ import com.example.bookapp.Activity.MainActivity;
 import com.example.bookapp.Activity.UpdateBookActivity;
 import com.example.bookapp.Domain.Book;
 import com.example.bookapp.Domain.Category;
+import com.example.bookapp.Domain.Post;
 import com.example.bookapp.Domain.Publisher;
 import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.SharedPrefManager;
@@ -45,6 +46,8 @@ import java.util.Map;
 public class BookManagementAdapter extends RecyclerView.Adapter<BookManagementAdapter.BookManagementViewHolder>{
     Context context;
     ArrayList<Book> books;
+
+    private BookManagementAdapter.OnItemClickListener onItemClickListener;
 
     public BookManagementAdapter(Context context, ArrayList<Book> books) {
         this.context = context;
@@ -68,13 +71,23 @@ public class BookManagementAdapter extends RecyclerView.Adapter<BookManagementAd
         holder.tvTitle.setText(book.getTitle());
         holder.tvAuthor.setText(book.getAuthor());
         Glide.with(context).load(book.getImage_url()).into(holder.imgBook);
+        int status = book.getStatus_id();
+        if (status == 1) {
+            holder.tvUpdateStatusBook.setText("Ẩn sách");
+        }
+        else {
+            holder.tvUpdateStatusBook.setText("Hiện sách");
+        }
 
-        //TODO: Add Event Listener for Delete
-
-        holder.tvDeleteBook.setOnClickListener(new View.OnClickListener() {
+        holder.tvUpdateStatusBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteBook(book.getId());
+                if (status == 1) {
+                    updateStatusBook(book.getId(), 2);
+                }
+                else {
+                    updateStatusBook(book.getId(), 1);
+                }
             }
         });
 
@@ -94,10 +107,18 @@ public class BookManagementAdapter extends RecyclerView.Adapter<BookManagementAd
         return books.size();
     }
 
+    public void setOnItemClickListener(BookManagementAdapter.OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Book book, int position);
+    }
+
     public class BookManagementViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgBook;
-        TextView tvTitle, tvAuthor, tvUpdateBook, tvDeleteBook;
+        TextView tvTitle, tvAuthor, tvUpdateBook, tvUpdateStatusBook;
         public BookManagementViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -105,15 +126,15 @@ public class BookManagementAdapter extends RecyclerView.Adapter<BookManagementAd
             tvTitle = itemView.findViewById(R.id.tvTitleAdmin);
             tvAuthor = itemView.findViewById(R.id.tvAuthorAdmin);
             tvUpdateBook = itemView.findViewById(R.id.tvUpdateBook);
-            tvDeleteBook = itemView.findViewById(R.id.tvDeleteBook);
+            tvUpdateStatusBook = itemView.findViewById(R.id.tvUpdateStatusBook);
         }
     }
 
-    private void deleteBook(int id) {
+    private void updateStatusBook(int id, int status_id) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", id);
-            jsonObject.put("status_id", 2);
+            jsonObject.put("status_id", status_id);
         } catch(Exception e) {
 
         }

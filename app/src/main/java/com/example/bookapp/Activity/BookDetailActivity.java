@@ -1,6 +1,8 @@
 package com.example.bookapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,34 +23,40 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.example.bookapp.Adapter.ReviewAdapter;
 import com.example.bookapp.Domain.Book;
+import com.example.bookapp.Domain.Review;
 import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.SharedPrefManager;
 import com.example.bookapp.Helper.VolleySingle;
 import com.example.bookapp.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BookDetailActivity extends AppCompatActivity {
     private ImageView addToListBtn, backBtn, imgBook, ivShare;
 
-    private TextView bookName, author, description, pageNumber, numPeopleRead;
-    private Button read;
+    private TextView bookName, author, description, pageNumber, numPeopleRead, tvNumRv;
+    private Button btnRead, btnReview;
+    private RatingBar ratingBarBook;
     private Book book;
-
     private User currentUser;
+    private RecyclerView rvReview;
+    private List<Review> reviews = new ArrayList<>();
+    private ReviewAdapter reviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
-
         currentUser = SharedPrefManager.getInstance(this).getUser();
-
         initData();
         ReadBookNum();
     }
@@ -62,14 +71,34 @@ public class BookDetailActivity extends AppCompatActivity {
         pageNumber = findViewById(R.id.tvpageNumber);
         numPeopleRead = findViewById(R.id.tvNumRead);
         ivShare = findViewById(R.id.ivShare);
-        read= findViewById(R.id.btnRead);
-        read.setOnClickListener(new View.OnClickListener() {
+        btnRead= findViewById(R.id.btnRead);
+        btnReview = findViewById(R.id.btnReview);
+        ratingBarBook = findViewById(R.id.ratingBarBook);
+        tvNumRv = findViewById(R.id.tvNumRv);
+        rvReview = findViewById(R.id.rvReview);
+
+        getReviews(book.getId());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rvReview.setLayoutManager(layoutManager);
+        reviewAdapter = new ReviewAdapter(this, reviews);
+        rvReview.setAdapter(reviewAdapter);
+
+        btnRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
                 intent.putExtra("link", book.getLink());
                 intent.putExtra("title", book.getTitle());
                 createHistory(4);
+                startActivity(intent);
+            }
+        });
+
+        btnReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BookDetailActivity.this, ReviewActivity.class);
+                intent.putExtra("book_id", book.getId());
                 startActivity(intent);
             }
         });
@@ -265,5 +294,45 @@ public class BookDetailActivity extends AppCompatActivity {
             }
         };
         VolleySingle.getInstance(this).addToRequestQueue(request);
+    }
+
+    private void getReviews(Integer bookId) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/review?book_id=" + bookId,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            JSONObject data = obj.getJSONObject("data");
+                            JSONArray reviewsJson = data.getJSONArray("rows");
+                            if (obj.getInt("err") == 0) {
+                                float rating = 0;
+                                for (int i = 0; i < reviewsJson.length(); i++) {
+                                    JSONObject reviewJson = reviewsJson.getJSONObject(i);
+                                    JSONObject userJson = reviewJson.getJSONObject("user");
+                                    Review review = new Review();
+                                    review.setId(reviewJson.getInt("id"));
+                                    review.setBook_id(reviewJson.getInt("book_id"));
+                                    review.setUser(userJson.getString("full_name"));
+                                    review.setTcontent(reviewJson.getString("tcontent"));
+                                    review.setRate(reviewJson.getInt("rate"));
+                                    rating += reviewJson.getInt("rate");
+                                    reviews.add(review);
+                                    reviewAdapter.setReviews(reviews);
+                                    tvNumRv.setText(reviews.size() + " reviews");
+                                }
+                                ratingBarBook.setRating(rating / reviewsJson.length());
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error.Response", error.toString());
+            }
+        });
+        VolleySingle.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

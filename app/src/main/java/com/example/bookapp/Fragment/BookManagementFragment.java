@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.bookapp.Activity.BookDetailActivity;
 import com.example.bookapp.Activity.CreateBookActivity;
 import com.example.bookapp.Adapter.BookAdapter;
 import com.example.bookapp.Adapter.BookManagementAdapter;
@@ -87,6 +88,15 @@ public class BookManagementFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), CreateBookActivity.class));
+            }
+        });
+
+        bookAdapter.setOnItemClickListener(new BookManagementAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Book book, int position) {
+                Intent intent = new Intent(getActivity(), BookDetailActivity.class);
+                intent.putExtra("book", book);
+                startActivity(intent);
             }
         });
 
