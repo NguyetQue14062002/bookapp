@@ -95,7 +95,7 @@ public class BookManagementFragment extends Fragment {
             @Override
             public void onItemClick(Book book, int position) {
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
-                intent.putExtra("book", book);
+                intent.putExtra("myBook", book);
                 startActivity(intent);
             }
         });

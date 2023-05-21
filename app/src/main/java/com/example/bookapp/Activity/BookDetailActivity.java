@@ -83,6 +83,10 @@ public class BookDetailActivity extends AppCompatActivity {
         reviewAdapter = new ReviewAdapter(this, reviews);
         rvReview.setAdapter(reviewAdapter);
 
+        if (currentUser.getRole_id() == 1) {
+            btnReview.setVisibility(View.GONE);
+        }
+
         btnRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

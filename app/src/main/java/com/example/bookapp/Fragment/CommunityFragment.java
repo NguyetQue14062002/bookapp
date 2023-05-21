@@ -94,9 +94,6 @@ public class CommunityFragment extends Fragment {
         return v;
     }
 
-    /*
-     * Override Ham onViewCreated va bat dau code nhu onCreate trong Activity
-     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

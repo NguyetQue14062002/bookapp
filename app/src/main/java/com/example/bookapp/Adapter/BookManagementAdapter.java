@@ -1,5 +1,6 @@
 package com.example.bookapp.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -66,7 +67,7 @@ public class BookManagementAdapter extends RecyclerView.Adapter<BookManagementAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BookManagementViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BookManagementViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Book book = books.get(position);
         holder.tvTitle.setText(book.getTitle());
         holder.tvAuthor.setText(book.getAuthor());
@@ -98,6 +99,12 @@ public class BookManagementAdapter extends RecyclerView.Adapter<BookManagementAd
                 Intent intent = new Intent(context, UpdateBookActivity.class);
                 intent.putExtra("myBook", book);
                 context.startActivity(intent);
+            }
+        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemClick(book, position);
             }
         });
     }
