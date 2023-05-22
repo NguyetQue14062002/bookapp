@@ -67,6 +67,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         if (post.getImage() != null) {
             Glide.with(context).load(post.getImage()).into(holder.postImage);
         }
+        else {
+            holder.postImage.setVisibility(View.GONE);
+        }
         if (post.getAvatar() != "null") {
             Glide.with(context).load(post.getAvatar()).into(holder.userImage);
         }

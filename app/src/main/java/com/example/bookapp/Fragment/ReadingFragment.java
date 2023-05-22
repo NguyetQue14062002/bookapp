@@ -68,7 +68,6 @@ public class ReadingFragment extends Fragment {
         bookLibraryAdapter = new BookLibraryAdapter(getContext(), books);
         booksRecyclerView.setAdapter(bookLibraryAdapter);
         getReadingHistory(view);
-
     }
 
     private void getReadingHistory(View view) {
@@ -76,9 +75,7 @@ public class ReadingFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         try {
-
                             //converting response to json object
                             JSONObject obj = new JSONObject(response);
                             if (obj.getInt("err") == 0) {

@@ -39,18 +39,11 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-/**
- * A simple {@link Fragment} subclass.ctory method to
- * create an instance of this fragment.
- */
 public class CommunityFragment extends Fragment {
     private PostAdapter postAdapter;
-
     private ImageView ivNewPost;
     private RecyclerView rvPosts;
-
     ActivityResultLauncher<Intent> activityResultLauncher;
-
 
     public CommunityFragment() {
         // Required empty public constructor

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,12 +55,14 @@ public class PostDetailActivity extends AppCompatActivity {
     private List<Comment> comments = new ArrayList<>();
     private Boolean isLiked = false;
     private int postId;
+    private LinearLayout linearLayoutCmt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_postdetail);
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            User user = SharedPrefManager.getInstance(this).getUser();
             postId = getIntent().getIntExtra("post_id", 0);
             numLike = getIntent().getIntExtra("post_num_likes", 0);
             numCmt = getIntent().getIntExtra("post_num_comments", 0);
@@ -83,6 +86,7 @@ public class PostDetailActivity extends AppCompatActivity {
             imgIconCmt = findViewById(R.id.imgIconCmt);
             etComment = findViewById(R.id.etComment);
             rcCmt = findViewById(R.id.rcCmt);
+            linearLayoutCmt = findViewById(R.id.linearLayoutCmt);
 
             tvName.setText(getIntent().getStringExtra("post_user"));
             tvContent.setText(getIntent().getStringExtra("post_tcontent"));
@@ -96,18 +100,17 @@ public class PostDetailActivity extends AppCompatActivity {
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             rcCmt.setLayoutManager(linearLayoutManager);
-            commentAdapter = new CommentAdapter(comments);
+            commentAdapter = new CommentAdapter(this, comments);
             rcCmt.setAdapter(commentAdapter);
 
             getBook();
 
-            User user = SharedPrefManager.getInstance(this).getUser();
             String accessToken = user.getAccess_token();
 
             String avt = getIntent().getStringExtra("avatar");
             String postImage = getIntent().getStringExtra("post_image");
             if (postImage != "null") {
-                Glide.with(this).load(getIntent().getStringExtra("post_image")).into(imgPost);
+                Glide.with(this).load(postImage).into(imgPost);
             }
             Glide.with(this).load(R.drawable.defaultavt).into(imgAvatar);
             if (avt != "null") {
@@ -168,6 +171,14 @@ public class PostDetailActivity extends AppCompatActivity {
                         getComments(postId);
                         commentAdapter.notifyDataSetChanged();
                     }
+                }
+            });
+            commentAdapter.setCommentDeleteListener(new CommentAdapter.CommentDeleteListener() {
+                @Override
+                public void onCommentDeleted(int commentId) {
+                    getComments(postId);
+                    commentAdapter.notifyDataSetChanged();
+                    tvNumCmt.setText(String.valueOf(comments.size()));
                 }
             });
         } else {
@@ -254,18 +265,14 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                if (postId != null) {
-                    params.put("post_id", String.valueOf(postId));
-                }
+                params.put("post_id", String.valueOf(postId));
                 return params;
             }
 
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                if (token != null) {
                     headers.put("Authorization", token);
-                }
                 return headers;
             }
         };

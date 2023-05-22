@@ -40,9 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView tvfull_name, tvemail, tvsdt;
     private ImageView avatarPro, exit;
     private Button btnResetpass, btnUpdate;
-
-
-    private String   access_token;
+    private String access_token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,16 +48,16 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         getData();
         if(SharedPrefManager.getInstance(this).isLoggedIn()) {
-        tvfull_name = findViewById(R.id.tvFullnameProfile);
-        tvemail = findViewById(R.id.tvEmailProfile);
-        tvsdt = findViewById(R.id.tvPhoneProfile);
-        exit = findViewById(R.id.exitProfile);
-        avatarPro = findViewById(R.id.imageProfile);
-        btnResetpass = findViewById(R.id.btnResetPass);
-        btnUpdate = findViewById(R.id.btnUpdateProfile);
-        User user= SharedPrefManager.getInstance(this).getUser();
+            tvfull_name = findViewById(R.id.tvFullnameProfile);
+            tvemail = findViewById(R.id.tvEmailProfile);
+            tvsdt = findViewById(R.id.tvPhoneProfile);
+            exit = findViewById(R.id.exitProfile);
+            avatarPro = findViewById(R.id.imageProfile);
+            btnResetpass = findViewById(R.id.btnResetPass);
+            btnUpdate = findViewById(R.id.btnUpdateProfile);
+            User user= SharedPrefManager.getInstance(this).getUser();
 
-        access_token = user.getAccess_token();
+            access_token = user.getAccess_token();
             if (user.getAvatar() == null)
                 avatarPro.setImageResource(R.drawable.defaultavt);
             else
@@ -67,13 +65,13 @@ public class ProfileActivity extends AppCompatActivity {
             exit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                    finish();
                 }
             });
             btnResetpass.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(ProfileActivity.this,OTPActivity.class ));
+                    startActivity(new Intent(ProfileActivity.this, OTPActivity.class ));
                 }
             });
             btnUpdate.setOnClickListener(new View.OnClickListener() {

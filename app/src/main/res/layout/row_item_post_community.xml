@@ -40,13 +40,6 @@
                     android:textSize="20dp"
                     android:textStyle="bold" />
             </LinearLayout>
-
-            <!--            <ImageView-->
-            <!--                android:id="@+id/ivMoreOption"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_weight="1"-->
-            <!--                app:srcCompat="@drawable/baseline_more_vert_24" />-->
         </LinearLayout>
 
         <LinearLayout
@@ -67,9 +60,8 @@
             <ImageView
                 android:id="@+id/postImage"
                 android:layout_width="match_parent"
+                android:layout_height="300dp"
                 android:scaleType="fitCenter"
-                android:layout_height="wrap_content"
-                android:maxHeight="200dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp" />
         </LinearLayout>
@@ -78,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <ImageView

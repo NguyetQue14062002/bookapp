@@ -9,7 +9,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="680dp">
 
         <LinearLayout
             android:id="@+id/linearLayout9"
@@ -30,13 +30,6 @@
                 android:textColor="@color/black"
                 android:textSize="24dp"
                 android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/ivSearchPost"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_search_24" />
 
             <ImageView
                 android:id="@+id/ivAddPost"

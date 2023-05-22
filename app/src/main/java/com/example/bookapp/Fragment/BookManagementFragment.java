@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,10 +43,11 @@ public class BookManagementFragment extends Fragment {
     private String mParam2;
 
     private ArrayList<Book> books;
+    private ArrayList<Book> bookSearch;
     private BookManagementAdapter bookAdapter;
     private RecyclerView booksRecyclerView;
-
-    private ImageView addBookBtn;
+    private EditText tvSearch;
+    private ImageView addBookBtn, iconSearch;
     private TextView tvAllBook, tvActiveBook, tvDeactivateBook;
 
     public BookManagementFragment() {
@@ -74,7 +76,8 @@ public class BookManagementFragment extends Fragment {
         booksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         bookAdapter = new BookManagementAdapter(getContext(), books);
         booksRecyclerView.setAdapter(bookAdapter);
-
+        tvSearch = view.findViewById(R.id.tvSearchAdmin);
+        iconSearch = view.findViewById(R.id.ivSearchBookAdmin);
         String urlAllBooks = "http://10.0.2.2:5000/api/book?order[]=id&order[]=DESC";
         String urlActiveBooks = "http://10.0.2.2:5000/api/book?order[]=id&order[]=DESC&status_id=1";
         String urlDeactivateBooks = "http://10.0.2.2:5000/api/book?order[]=id&order[]=DESC&status_id=2";
@@ -130,6 +133,15 @@ public class BookManagementFragment extends Fragment {
                 tvDeactivateBook.setTextColor(Color.BLUE);
                 getAllBooks(urlDeactivateBooks);
                 bookAdapter.notifyDataSetChanged();
+            }
+        });
+        iconSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bookSearch = new ArrayList<>();
+                bookAdapter = new BookManagementAdapter(getContext(), bookSearch);
+                booksRecyclerView.setAdapter(bookAdapter);
+                SeachBookAdmin();
             }
         });
     }
@@ -191,5 +203,64 @@ public class BookManagementFragment extends Fragment {
         );
         VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequest);
 
+    }
+    private void  SeachBookAdmin(){
+        String key= tvSearch.getText().toString();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/book/?search_key="+key,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            //converting response to json object
+                            JSONObject obj = new JSONObject(response);
+                            if (obj.getInt("err") == 0) {
+                                JSONObject data = obj.getJSONObject("data");
+                                JSONArray allBooks = data.getJSONArray("rows");
+                                for (int i = 0; i < allBooks.length(); i++) {
+                                    JSONObject object = allBooks.getJSONObject(i);
+                                    try {
+                                        object.getInt("category_id");
+                                    } catch (JSONException e) {
+                                        object.put("category_id", -1);
+                                    }
+                                    try {
+                                        object.getInt("publisher_id");
+                                    } catch (JSONException e) {
+                                        object.put("publisher_id", -1);
+                                    }
+                                    Book book = new Book(
+                                            object.getInt("id"),
+                                            object.getInt("category_id"),
+                                            object.getInt("status_id"),
+                                            object.getInt("publisher_id"),
+                                            object.getInt("page_number"),
+                                            object.getString("author"),
+                                            object.getString("description"),
+                                            object.getString("image_url"),
+                                            object.getString("link"),
+                                            object.getString("title")
+                                    );
+                                    bookSearch.add(book);
+                                }
+                                bookAdapter.setBooks(bookSearch);
+                                bookAdapter.notifyDataSetChanged();
+                                Log.d("books", String.valueOf(bookSearch.size()));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        VolleySingle.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
 }

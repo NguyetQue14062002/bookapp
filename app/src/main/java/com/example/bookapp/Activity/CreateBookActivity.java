@@ -61,10 +61,8 @@ public class CreateBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                startActivity(new Intent(CreateBookActivity.this, AdminActivity.class));
             }
         });
-
         ItemPublisher();
         ItemCategory();
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -73,19 +71,7 @@ public class CreateBookActivity extends AppCompatActivity {
                 CreateBook();
             }
         });
-
-
     }
-    /*
-    title": "AQQ",
-    "author": "AB",
-    "publisher_id": 1,
-    "description": "AB",
-    "page_number": 200,
-    "category_id": 7,
-    "image_url": "sdfg.img",
-    "link": "dsfghg.com
-     */
     private void CreateBook(){
         JSONObject jsonObject = new JSONObject();
         Publisher publisher = (Publisher) spPublisher.getSelectedItem();
@@ -112,12 +98,10 @@ public class CreateBookActivity extends AppCompatActivity {
                             //if no error in response
                             if (response.getInt("err") == 0) {
                                 Toast.makeText(CreateBookActivity.this, response.getString("message"), Toast.LENGTH_SHORT).show();
-                                //getting the user from the response
-
-
                             } else {
                                 Toast.makeText(CreateBookActivity.this, response.getString("message"), Toast.LENGTH_LONG).show();
                             }
+                            finish();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -129,7 +113,6 @@ public class CreateBookActivity extends AppCompatActivity {
                         if (error.getMessage() != null) {
                             Toast.makeText(CreateBookActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 }
         ) {
@@ -139,7 +122,6 @@ public class CreateBookActivity extends AppCompatActivity {
                 params.put("Authorization", SharedPrefManager.getInstance(CreateBookActivity.this).getUser().getAccess_token());
                 return params;
             }
-
         };
         VolleySingle.getInstance(this).addToRequestQueue(request);
     }

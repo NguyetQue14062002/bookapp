@@ -77,6 +77,10 @@ public class BookDetailActivity extends AppCompatActivity {
         tvNumRv = findViewById(R.id.tvNumRv);
         rvReview = findViewById(R.id.rvReview);
 
+        if (currentUser.getRole_id() == 1) {
+            addToListBtn.setVisibility(View.GONE);
+        }
+
         getReviews(book.getId());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvReview.setLayoutManager(layoutManager);
@@ -102,8 +106,9 @@ public class BookDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BookDetailActivity.this, ReviewActivity.class);
-                intent.putExtra("book_id", book.getId());
+                intent.putExtra("myBook", book);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -177,6 +182,15 @@ public class BookDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        reviewAdapter.setReviewDeleteListener(new ReviewAdapter.ReviewDeleteListener() {
+            @Override
+            public void onReviewDeleted(int commentId) {
+                getReviews(book.getId());
+                reviewAdapter.notifyDataSetChanged();
+                tvNumRv.setText(String.valueOf(reviews.size()));
             }
         });
 
@@ -306,6 +320,7 @@ public class BookDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            reviews.clear();
                             JSONObject obj = new JSONObject(response);
                             JSONObject data = obj.getJSONObject("data");
                             JSONArray reviewsJson = data.getJSONArray("rows");

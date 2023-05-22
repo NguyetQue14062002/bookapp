@@ -9,25 +9,27 @@
     <LinearLayout
         android:id="@+id/linearLayout12"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingVertical="5dp"
+        android:weightSum="6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/exitReadBook"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             app:srcCompat="@drawable/baseline_keyboard_arrow_left_24" />
 
         <TextView
             android:id="@+id/tvNameBookDeading"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="5dp"
+            android:paddingHorizontal="5dp"
+            android:layout_gravity="center"
             android:layout_weight="5"
             android:gravity="center"
             android:text="The Arsonist"
@@ -40,8 +42,8 @@
 
     <WebView
         android:id="@+id/web"
-        android:layout_width="410dp"
-        android:layout_height="679dp"
+        android:layout_width="match_parent"
+        android:layout_height="660dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout12" />

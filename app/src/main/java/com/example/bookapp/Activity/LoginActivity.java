@@ -49,12 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-//        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-//            finish();
-//            startActivity(new Intent(this, MainActivity.class));
-//        }
-
         etmail = findViewById(R.id.tvEmailLogin);
         etpass = findViewById(R.id.tvPassLogin);
         btnLogin = findViewById(R.id.btnLogin);
@@ -95,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this, OTPActivity.class));
-
             }
         });
     }

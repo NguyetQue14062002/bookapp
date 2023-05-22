@@ -180,7 +180,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     }
 
     private void getAllBooks() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/book/",
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/book?order[]=id&order[]=DESC&status_id=1",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

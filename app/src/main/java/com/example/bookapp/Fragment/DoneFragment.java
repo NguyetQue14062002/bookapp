@@ -43,13 +43,11 @@ public class DoneFragment extends Fragment {
         return fragment;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.done_fragment, container, false);
-
     }
 
     @Override

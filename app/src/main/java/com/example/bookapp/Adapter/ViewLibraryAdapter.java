@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 public class ViewLibraryAdapter extends FragmentStateAdapter{
 
-
     public ViewLibraryAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }

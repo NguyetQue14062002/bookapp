@@ -37,9 +37,6 @@
             android:name=".Activity.CreateBookActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.FogetPasswordActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activity.ProfileActivity"
             android:exported="false" />
         <activity

@@ -33,12 +33,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>{
-
     Context context;
     List<Review> reviews = new ArrayList<>();
-
     User user;
-    private OnItemClickListener onItemClickListener;
+    private ReviewDeleteListener listener;
 
     public ReviewAdapter(Context context, List<Review> reviews) {
         this.context = context;
@@ -83,16 +81,25 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             @Override
             public void onClick(View v) {
                 deleteReview(review.getId());
+                if (listener != null) {
+                    listener.onReviewDeleted(review.getId());
+                }
+                reviews.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, reviews.size());
+
             }
         });
     }
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    public void setReviewDeleteListener(ReviewDeleteListener listener) {
+        this.listener = listener;
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(Review review, int position);
+    public interface ReviewDeleteListener {
+        void onReviewDeleted(int commentId);
     }
+
+
     public class ReviewViewHolder extends RecyclerView.ViewHolder {
         TextView tvReviewer, tvContentReview;
         RatingBar ratingBar;

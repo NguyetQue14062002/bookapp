@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.example.bookapp.Adapter.ReviewAdapter;
+import com.example.bookapp.Domain.Book;
 import com.example.bookapp.Domain.Review;
 import com.example.bookapp.Domain.User;
 import com.example.bookapp.Helper.SharedPrefManager;
@@ -50,7 +51,8 @@ public class ReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            int bookId = getIntent().getIntExtra("book_id",0);
+            Book book = (Book) getIntent().getSerializableExtra("myBook");
+            int bookId = book.getId();
             ratingBar = findViewById(R.id.ratingBarRv);
             content = findViewById(R.id.tvReview);
             btnSubmit = findViewById(R.id.btnSubmit);
@@ -69,6 +71,9 @@ public class ReviewActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     reviewBook(bookId, user.getAccess_token());
                     finish();
+                    Intent intent = new Intent(ReviewActivity.this, BookDetailActivity.class);
+                    intent.putExtra("myBook", book);
+                    startActivity(intent);
                 }
             });
         }
@@ -80,6 +85,7 @@ public class ReviewActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            reviews.clear();
                             JSONObject obj = new JSONObject(response);
                             JSONObject data = obj.getJSONObject("data");
                             JSONArray reviewsJson = data.getJSONArray("rows");
@@ -123,7 +129,6 @@ public class ReviewActivity extends AppCompatActivity {
                             JSONObject obj = new JSONObject(response);
                             //if no error in response
                             if (obj.getInt("err") == 0) {
-                                reviewAdapter.notifyDataSetChanged();
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();

@@ -1,5 +1,6 @@
 package com.example.bookapp.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,11 +32,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PostManagementAdapter extends RecyclerView.Adapter<PostManagementAdapter.PostManagementViewHolder>{
     Context context;
-    ArrayList<Post> posts;
+    List<Post> posts = new ArrayList<>();
+    private OnItemClickListener onItemClickListener;
 
     public PostManagementAdapter(Context context, ArrayList<Post> posts) {
         this.context = context;
@@ -54,25 +57,47 @@ public class PostManagementAdapter extends RecyclerView.Adapter<PostManagementAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostManagementViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PostManagementViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Post post = posts.get(position);
 
         holder.userName.setText(post.getUser());
         holder.content.setText(post.getTcontent());
         Glide.with(context).load(post.getImage()).into(holder.postImage);
 
-        //TODO: Add Event Listener for Update and Delete
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 deletePost(post.getId());
             }
         });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemClick(post, position);
+            }
+        });
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Post post, int position);
     }
 
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+        notifyDataSetChanged();
+    }
+    public Post getItem(int position) {
+        return posts.get(position);
     }
 
     public class PostManagementViewHolder extends RecyclerView.ViewHolder{

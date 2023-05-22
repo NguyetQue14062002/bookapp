@@ -36,7 +36,8 @@ public class AdminActivity extends AppCompatActivity {
                 case R.id.posts:
                     replaceFragment(new PostManagementFragment());
                     break;
-
+                case R.id.setting:
+                    replaceFragment(new SettingsFragment());
 
             }
             return true;
