@@ -56,7 +56,9 @@ public class ProfileActivity extends AppCompatActivity {
             btnResetpass = findViewById(R.id.btnResetPass);
             btnUpdate = findViewById(R.id.btnUpdateProfile);
             User user= SharedPrefManager.getInstance(this).getUser();
-
+            if (user.getRole_id() == 1) {
+                btnResetpass.setVisibility(View.GONE);
+            }
             access_token = user.getAccess_token();
             if (user.getAvatar() == null)
                 avatarPro.setImageResource(R.drawable.defaultavt);
