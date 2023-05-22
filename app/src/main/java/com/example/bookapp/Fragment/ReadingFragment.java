@@ -67,10 +67,11 @@ public class ReadingFragment extends Fragment {
         booksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         bookLibraryAdapter = new BookLibraryAdapter(getContext(), books);
         booksRecyclerView.setAdapter(bookLibraryAdapter);
-        getReadingHistory(view);
+        getReadingHistory();
+
     }
 
-    private void getReadingHistory(View view) {
+    private void getReadingHistory() {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://10.0.2.2:5000/api/history/?status_id=4&user_id="+SharedPrefManager.getInstance(getContext()).getUser().getId(),
                 new Response.Listener<String>() {
                     @Override
@@ -83,11 +84,21 @@ public class ReadingFragment extends Fragment {
                                 JSONArray allBooks = data.getJSONArray("rows");
                                 for (int i = 0; i < allBooks.length(); i++) {
                                     JSONObject object = allBooks.getJSONObject(i).getJSONObject("book");
+                                    try {
+                                        object.getInt("category_id");
+                                    } catch (JSONException e) {
+                                        object.put("category_id", -1);
+                                    }
+                                    try {
+                                        object.getInt("publisher_id");
+                                    } catch (JSONException e) {
+                                        object.put("publisher_id", -1);
+                                    }
                                     Book book = new Book(
                                             object.getInt("id"),
                                             object.getInt("category_id"),
                                             object.getInt("status_id"),
-                                            -1,
+                                            object.getInt("publisher_id"),
                                             object.getString("author"),
                                             object.getString("description"),
                                             object.getString("image_url"),

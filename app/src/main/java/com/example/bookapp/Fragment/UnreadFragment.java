@@ -73,7 +73,9 @@ public class UnreadFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
                         try {
+
                             //converting response to json object
                             JSONObject obj = new JSONObject(response);
                             if (obj.getInt("err") == 0) {
@@ -81,11 +83,21 @@ public class UnreadFragment extends Fragment {
                                 JSONArray allBooks = data.getJSONArray("rows");
                                 for (int i = 0; i < allBooks.length(); i++) {
                                     JSONObject object = allBooks.getJSONObject(i).getJSONObject("book");
+                                    try {
+                                        object.getInt("category_id");
+                                    } catch (JSONException e) {
+                                        object.put("category_id", -1);
+                                    }
+                                    try {
+                                        object.getInt("publisher_id");
+                                    } catch (JSONException e) {
+                                        object.put("publisher_id", -1);
+                                    }
                                     Book book = new Book(
                                             object.getInt("id"),
                                             object.getInt("category_id"),
                                             object.getInt("status_id"),
-                                            -1,
+                                            object.getInt("publisher_id"),
                                             object.getString("author"),
                                             object.getString("description"),
                                             object.getString("image_url"),

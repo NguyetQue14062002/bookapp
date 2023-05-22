@@ -1,7 +1,5 @@
 package com.example.bookapp.Adapter;
 
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,6 +16,7 @@ import com.example.bookapp.Fragment.UnreadFragment;
 import java.util.ArrayList;
 
 public class ViewLibraryAdapter extends FragmentStateAdapter{
+
 
     public ViewLibraryAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);

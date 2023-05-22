@@ -62,7 +62,7 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
     @Override
     public void onBindViewHolder(@NonNull BookLibraryViewHolder holder, int position) {
         Book book = books.get(position);
-        
+
         holder.tvBookName.setText(book.getTitle());
         holder.tvAuthor.setText(book.getAuthor());
         Glide.with(context).load(book.getImage_url()).into(holder.imgBook);
@@ -75,15 +75,15 @@ public class BookLibraryAdapter extends RecyclerView.Adapter<BookLibraryAdapter.
             }
         });
         //TODO: reading
-       holder.imgBook.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               Intent intent = new Intent(context, ReadBookActivity.class);
-               intent.putExtra("link", book.getLink());
-               intent.putExtra("title", book.getTitle());
-               context.startActivity(intent);
-           }
-       });
+        holder.imgBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ReadBookActivity.class);
+                intent.putExtra("link", book.getLink());
+                intent.putExtra("title", book.getTitle());
+                context.startActivity(intent);
+            }
+        });
         //TODO: updateHistory
         holder.updateBtn.setOnClickListener(new View.OnClickListener() {
             int status_id;

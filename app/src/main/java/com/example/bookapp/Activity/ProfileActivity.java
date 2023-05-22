@@ -85,30 +85,30 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
     }
-        private void getData() {
-            // String Request initialized
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, " http://10.0.2.2:5000/api/user", new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        //converting response to json object
-                        JSONObject obj = new JSONObject(response);
-                        //if no error in response
-                        if (obj.getInt("err") == 0) {
-                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                            //getting the user from the response
-                            JSONObject userJson = obj.getJSONObject("userData");
-                            String email= userJson.getString("email");
-                            String phone= userJson.getString("phone_number");
-                            String fullname= userJson.getString("full_name");
-                            tvemail.setText(email);
-                            tvfull_name.setText(fullname);
-                            tvsdt.setText(phone);
-                        }
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
+    private void getData() {
+        // String Request initialized
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, " http://10.0.2.2:5000/api/user", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    //converting response to json object
+                    JSONObject obj = new JSONObject(response);
+                    //if no error in response
+                    if (obj.getInt("err") == 0) {
+                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        //getting the user from the response
+                        JSONObject userJson = obj.getJSONObject("userData");
+                        String email= userJson.getString("email");
+                        String phone= userJson.getString("phone_number");
+                        String fullname= userJson.getString("full_name");
+                        tvemail.setText(email);
+                        tvfull_name.setText(fullname);
+                        tvsdt.setText(phone);
                     }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
+            }
             },new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
@@ -125,8 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
                     return headers;
                 }
             };
-
-            VolleySingle.getInstance(this).addToRequestQueue(stringRequest);
-        }
+        VolleySingle.getInstance(this).addToRequestQueue(stringRequest);
+    }
 
 }
